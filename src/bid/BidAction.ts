@@ -11,15 +11,20 @@ class BidAction  {
         if(Game.phase !== Phase.BID)
             return false;
 
-        if(!Game.bidding.tryAdd(this.player, this.bid))
+        if(Game.bidding.hasEntryFor(this.player))
             return false;
+
+        // TODO add extended validation here
 
         return true;
     }
 
     execute():void{
-        if(this.isValid())
+        if(this.isValid()){
             Game.bidding.add(this.player, this.bid);
+            if(Game.bidding.entries.length === 4)
+                Game.bidding.resolve();
+        }
     }
 }
 

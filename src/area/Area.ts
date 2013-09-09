@@ -3,14 +3,14 @@ import Player = require("src/player/Player");
 
 class Area<T> {
 
-    items: Array<Entry<T>>
+    entries: Array<Entry<T>>;
 
     constructor(){
-        this.items = [];
+        this.entries = [];
     }
 
     add(player:Player, t:T){
-        this.items.push({
+        this.entries.push({
             player: player,
             item: t
         });
@@ -25,15 +25,38 @@ class Area<T> {
         return true;
     }
 
+    /**
+     * Checks if the items array holds an entry for the player
+     * @param player
+     * @returns {boolean}
+     */
     hasEntryFor(player:Player){
-        for(var i = 0; i < this.items.length; i++){
-            if(this.items[i].player === player)
+        for(var i = 0; i < this.entries.length; i++){
+            if(this.entries[i].player === player)
                 return true;
         }
         return false;
     }
 
+    /**
+     * Resolves the area's items
+     */
     resolve(): void {
+        if(this.entries.length !== 4)
+            return;
+
+        for(var i = 0; i < 4; i++){
+            this.checkEntry(this.entries[i]);
+        }
+
+        this.finalize();
+    }
+
+    checkEntry(entry: Entry<T>){
+
+    }
+
+    finalize(){
 
     }
 }

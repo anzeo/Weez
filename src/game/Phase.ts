@@ -1,5 +1,6 @@
 enum Phase {
     SETUP,
-    BID
+    BID,
+    PLAY
 }
 export = Phase;

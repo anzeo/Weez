@@ -4,10 +4,12 @@ import Deck = require("src/card/Deck");
 import Phase = require("src/game/Phase");
 import Player = require("src/player/Player");
 import Mode = require("src/game/GameMode");
-import Area = require("src/area/Area");
+import Bidding = require("src/area/Bidding");
 import Bid = require("src/bid/Bid");
 
-export var currentPlayer: Player,
+export var
+    activePlayers: Array<Player>,
+    currentPlayer: Player,
     deck: Deck,
     dealer: Player,
     phase: Phase,
@@ -15,7 +17,7 @@ export var currentPlayer: Player,
 
     defaultTrump: Suit,
 
-    bidding: any,
+    bidding: Bidding,
     mode:Mode;
 
 export function deal(){
@@ -40,6 +42,6 @@ export function setup(_deck: Deck, _players: Array<Player>){
     phase = Phase.SETUP;
     players = _players;
     dealer = players[0];
-
-    this.bidding = new Area<Bid>();
+console.log(Bidding);
+    bidding = new Bidding();
 }

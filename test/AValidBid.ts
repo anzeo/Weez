@@ -7,6 +7,7 @@ import Game = require("src/game/Game");
 import GameMode = require("src/game/GameMode");
 import Deck = require("src/card/Deck");
 import Player = require("src/player/Player");
+import Phase = require("src/game/Phase");
 
 describe("A valid bid", function(){
 
@@ -15,7 +16,7 @@ describe("A valid bid", function(){
     })
 
     it("is made in the bid phase", function(){
-        var bidAction = new BidAction(Game.players[0], new Bid(Suit.HEARTS) );
+        var bidAction = new BidAction(Game.players[0], new Bid() );
 
         expect(bidAction.isValid()).toEqual(false);
 
@@ -25,8 +26,8 @@ describe("A valid bid", function(){
     });
 
     xit("is made in the current player's turn", function(){
-        var bidActionPlayer1 = new BidAction(Game.players[1], new Bid(Suit.HEARTS)),
-            bidActionPlayer2 = new BidAction(Game.players[2], new Bid(Suit.HEARTS) );
+        var bidActionPlayer1 = new BidAction(Game.players[1], new Bid()),
+            bidActionPlayer2 = new BidAction(Game.players[2], new Bid());
 
         Game.deal();
 
@@ -38,7 +39,7 @@ describe("A valid bid", function(){
     })
 
     it("can be made only once per player", function(){
-        var bidAction = new BidAction(Game.players[0], new Bid(Suit.HEARTS) );
+        var bidAction = new BidAction(Game.players[0], new Bid() );
 
         Game.deal();
 
@@ -49,17 +50,44 @@ describe("A valid bid", function(){
         expect(bidAction.isValid()).toEqual(false);
     })
 
-    xit("is resolved to the bid type with the highest advantage", function(){
-        var bidActionPlayer1 = new BidAction(Game.players[1], new Bid(Suit.HEARTS)),
-            bidActionPlayer2 = new BidAction(Game.players[1], new Bid(Suit.HEARTS, BidType.ABONDANCE) );
+    it("can only be resolved if all 4 players have bid", function(){
+        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid(BidType.DEFAULT)),
+            bidActionPlayer3 = new BidAction(Game.players[2], new Bid(BidType.DEFAULT)),
+            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(BidType.PASS)),
+            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(BidType.PASS));
 
         Game.deal();
 
-        bidActionPlayer1.execute();
+        Game.bidding.resolve();
+
+        expect(Game.phase).toEqual(Phase.BID); // phase has not been changed
+        expect(Game.mode).toBeUndefined();
+
         bidActionPlayer2.execute();
+        bidActionPlayer3.execute();
+        bidActionPlayer4.execute();
+        bidActionPlayer1.execute();
 
         Game.bidding.resolve();
 
+        expect(Game.phase).toEqual(Phase.PLAY);
+        expect(Game.mode).toEqual(GameMode.NORMAL);
+    })
+
+    it("is resolved to the bid type with the highest advantage", function(){
+        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid(BidType.DEFAULT)),
+            bidActionPlayer3 = new BidAction(Game.players[2], new Bid(BidType.ABONDANCE)),
+            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(BidType.PASS)),
+            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(BidType.PASS));
+
+        Game.deal();
+
+        bidActionPlayer2.execute();
+        bidActionPlayer3.execute();
+        bidActionPlayer4.execute();
+        bidActionPlayer1.execute(); // Fourth bid, should resolve area
+
+        expect(Game.phase).toEqual(Phase.PLAY);
         expect(Game.mode).toEqual(GameMode.ABONDANCE);
     })
 })

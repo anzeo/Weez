@@ -1,4 +1,5 @@
 enum BidType {
+    PASS,
     DEFAULT,
     ABONDANCE
 }
