@@ -1,12 +1,10 @@
 import Suit = require("src/card/Suit");
-import BidType = require("src/bid/BidType");
-import Game = require("src/game/Game");
+import Mode = require("src/game/Mode");
 
 class Bid {
-    constructor(public bidType?: BidType, public suit?: Suit){
-        this.bidType = bidType || BidType.DEFAULT;
-        if(bidType !== BidType.PASS)
-            this.suit = suit || Game.defaultTrump;
+    constructor(public mode?: Mode, public suit?: Suit){
+        this.mode = mode || Mode.NORMAL;
+        this.suit = mode !== Mode.PASS ? suit : undefined;
     }
 }
 

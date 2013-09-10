@@ -3,7 +3,7 @@ import Suit = require("src/card/Suit");
 import Deck = require("src/card/Deck");
 import Phase = require("src/game/Phase");
 import Player = require("src/player/Player");
-import Mode = require("src/game/GameMode");
+import Mode = require("src/game/Mode");
 import Bidding = require("src/area/Bidding");
 import Bid = require("src/bid/Bid");
 
