@@ -14,44 +14,49 @@ export var
     dealer: Player,
     phase: Phase,
     players: Array<Player>,
-
+    trump: Suit,
     defaultTrump: Suit,
-
     bidding: Bidding,
-    mode:Mode;
+    mode:Mode,
+    target: number,
 
-export function deal(){
-    var cardsToDeal: Array<Card>,
-        start = (players.indexOf(dealer) + 1) % 4,
-        i = 0,
-        lastCard = deck.cards[0];
+    deal = function(){
+        var cardsToDeal: Array<Card>,
+            start = (players.indexOf(dealer) + 1) % 4,
+            i = 0,
+            lastCard = deck.cards[0];
 
-    while(deck.cards.length){
-        cardsToDeal = deck.take(deck.cards.length > 20 ? 4 : 5);
-        players[ (start + i++ ) % 4 ].deal(cardsToDeal);
+        while(deck.cards.length){
+            cardsToDeal = deck.take(deck.cards.length > 20 ? 4 : 5);
+            players[ (start + i++ ) % 4 ].deal(cardsToDeal);
+        }
+
+        currentPlayer = players[start];
+        phase = Phase.BID;
+        defaultTrump = lastCard.suit;
+    },
+
+    play = function(){
+        mode = bidding.resolvedMode;
+        if(mode !== Mode.PASS){
+            trump = bidding.resolvedTrump || defaultTrump;
+            activePlayers = bidding.activePlayers;
+            phase = Phase.PLAY;
+            target = bidding.target;
+        }
+    },
+
+    advanceCurrentPlayer = function(){
+        currentPlayer = players[ (players.indexOf(currentPlayer) + 1) % 4];
+    },
+
+    setup = function(_deck: Deck, _players: Array<Player>){
+        deck = _deck;
+        phase = Phase.SETUP;
+        players = _players;
+        dealer = players[0];
+        bidding = new Bidding();
+        mode = undefined;
+        target = 0;
+        trump = undefined;
     }
-
-    currentPlayer = players[start];
-    phase = Phase.BID;
-    defaultTrump = lastCard.suit;
-}
-
-export function play(){
-    defaultTrump = bidding.resolvedTrump;
-    mode = bidding.resolvedMode;
-    activePlayers = bidding.activePlayers;
-    phase = Phase.PLAY;
-}
-
-export function advanceCurrentPlayer(){
-    currentPlayer = players[ (players.indexOf(currentPlayer) + 1) % 4];
-}
-
-export function setup(_deck: Deck, _players: Array<Player>){
-    deck = _deck;
-    phase = Phase.SETUP;
-    players = _players;
-    dealer = players[0];
-console.log(Bidding);
-    bidding = new Bidding();
-}

@@ -27,14 +27,20 @@ class BidAction  {
         if(Game.bidding.activePlayers.length < 2)
             return true;
 
-        return true;
+        return false;
     }
 
-    execute():void{
+    execute(): void {
         if(this.isValid()){
             Game.bidding.add(this.player, this.bid);
             if(Game.bidding.entries.length === 4){
-                Game.play();
+                if(Game.bidding.needsConfirmation()){
+                    Game.currentPlayer = Game.bidding.activePlayers[0];
+                    Game.bidding.removeActivePlayerEntry();
+                    return;
+                } else {
+                    Game.play();
+                }
             }
             Game.advanceCurrentPlayer();
         }
