@@ -17,7 +17,7 @@ describe("A valid bid", function(){
 
     it("is made in the bid phase", function(){
         Game.setup(new Deck(), [new Player(), new Player(), new Player(), new Player()]);
-        var bidAction = new BidAction(Game.players[0], new Bid() );
+        var bidAction = new BidAction(Game.players[1], new Bid() );
 
         expect(bidAction.isValid()).toEqual(false);
 
@@ -26,7 +26,7 @@ describe("A valid bid", function(){
         expect(bidAction.isValid()).toEqual(true);
     });
 
-    xit("is made in the current player's turn", function(){
+    it("is made in the current player's turn", function(){
         var bidActionPlayer1 = new BidAction(Game.players[1], new Bid()),
             bidActionPlayer2 = new BidAction(Game.players[2], new Bid());
 
@@ -38,7 +38,7 @@ describe("A valid bid", function(){
     })
 
     it("can be made only once per player", function(){
-        var bidAction = new BidAction(Game.players[0], new Bid() );
+        var bidAction = new BidAction(Game.players[1], new Bid() );
 
         expect(bidAction.isValid()).toEqual(true);
 
@@ -53,32 +53,18 @@ describe("A valid bid", function(){
             bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
             bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
 
-        Game.bidding.resolve();
-
-        expect(Game.phase).toEqual(Phase.BID); // phase has not been changed
-        expect(Game.mode).toBeUndefined();
-
         bidActionPlayer2.execute();
+        expect(Game.phase).toEqual(Phase.BID);
+        expect(Game.mode).toBeUndefined();
         bidActionPlayer3.execute();
+        expect(Game.phase).toEqual(Phase.BID);
+        expect(Game.mode).toBeUndefined();
         bidActionPlayer4.execute();
+        expect(Game.phase).toEqual(Phase.BID);
+        expect(Game.mode).toBeUndefined();
         bidActionPlayer1.execute();
-
         expect(Game.phase).toEqual(Phase.PLAY);
         expect(Game.mode).toEqual(Mode.NORMAL);
-    })
-
-    it("is resolved to the bid type with the highest advantage", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid()),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid(Mode.ABONDANCE)),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
-
-        bidActionPlayer2.execute();
-        bidActionPlayer3.execute();
-        bidActionPlayer4.execute();
-        bidActionPlayer1.execute();
-
-        expect(Game.phase).toEqual(Phase.PLAY);
-        expect(Game.mode).toEqual(Mode.ABONDANCE);
+        expect(Game.currentPlayer).toEqual(Game.players[1]);
     })
 })

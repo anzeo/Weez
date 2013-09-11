@@ -16,15 +16,6 @@ class Area<T> {
         });
     }
 
-    tryAdd(player:Player, t:T): boolean{
-
-        if(this.hasEntryFor(player))
-            return false;
-
-        this.add(player,t);
-        return true;
-    }
-
     /**
      * Checks if the items array holds an entry for the player
      * @param player
@@ -36,28 +27,6 @@ class Area<T> {
                 return true;
         }
         return false;
-    }
-
-    /**
-     * Resolves the area's items
-     */
-    resolve(): void {
-        if(this.entries.length !== 4)
-            return;
-
-        for(var i = 0; i < 4; i++){
-            this.checkEntry(this.entries[i]);
-        }
-
-        this.finalize();
-    }
-
-    checkEntry(entry: Entry<T>){
-
-    }
-
-    finalize(){
-
     }
 }
 

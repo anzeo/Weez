@@ -33,8 +33,18 @@ export function deal(){
 
     currentPlayer = players[start];
     phase = Phase.BID;
-
     defaultTrump = lastCard.suit;
+}
+
+export function play(){
+    defaultTrump = bidding.resolvedTrump;
+    mode = bidding.resolvedMode;
+    activePlayers = bidding.activePlayers;
+    phase = Phase.PLAY;
+}
+
+export function advanceCurrentPlayer(){
+    currentPlayer = players[ (players.indexOf(currentPlayer) + 1) % 4];
 }
 
 export function setup(_deck: Deck, _players: Array<Player>){
