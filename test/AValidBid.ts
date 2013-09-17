@@ -101,6 +101,8 @@ describe("A valid bid", function(){
         bidActionPlayer2.execute();
         expect(Game.phase).toEqual(Phase.PLAY);
         expect(Game.mode).toEqual(Mode.NORMAL);
+        expect(Game.currentPlayer).toEqual(Game.players[1]);
+        expect(Game.trump).toEqual(Game.defaultTrump);
     })
 
     it("can be resolved with 2 active players at a target of 8", function(){

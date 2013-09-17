@@ -33,16 +33,18 @@ class BidAction  {
     execute(): void {
         if(this.isValid()){
             Game.bidding.add(this.player, this.bid);
-            if(Game.bidding.entries.length === 4){
-                if(Game.bidding.needsConfirmation()){
-                    Game.currentPlayer = Game.bidding.activePlayers[0];
-                    Game.bidding.removeActivePlayerEntry();
-                    return;
-                } else {
-                    Game.play();
-                }
+            if(Game.bidding.entries.length < 4){
+                Game.advanceCurrentPlayer();
+                return;
             }
-            Game.advanceCurrentPlayer();
+
+            if(Game.bidding.needsConfirmation()){
+                Game.currentPlayer = Game.bidding.activePlayers[0];
+                Game.bidding.removeActivePlayerEntry();
+                return;
+            } else {
+                Game.play();
+            }
         }
     }
 }

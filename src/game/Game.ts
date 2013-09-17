@@ -7,6 +7,10 @@ import Mode = require("src/game/Mode");
 import Bidding = require("src/area/Bidding");
 import Bid = require("src/bid/Bid");
 
+function getPlayerNextOf(player: Player): Player{
+    return players[ (players.indexOf(player) + 1) % 4]
+}
+
 export var
     activePlayers: Array<Player>,
     currentPlayer: Player,
@@ -38,16 +42,20 @@ export var
 
     play = function(){
         mode = bidding.resolvedMode;
-        if(mode !== Mode.PASS){
-            trump = bidding.resolvedTrump || defaultTrump;
-            activePlayers = bidding.activePlayers;
-            phase = Phase.PLAY;
-            target = bidding.target;
+        if(mode === Mode.PASS){
+            // TODO what to do in case mode is PASS?
+            return;
         }
+
+        trump = bidding.resolvedTrump || defaultTrump;
+        activePlayers = bidding.activePlayers;
+        phase = Phase.PLAY;
+        target = bidding.target;
+        currentPlayer = getPlayerNextOf(dealer);
     },
 
     advanceCurrentPlayer = function(){
-        currentPlayer = players[ (players.indexOf(currentPlayer) + 1) % 4];
+        currentPlayer = getPlayerNextOf(currentPlayer);
     },
 
     setup = function(_deck: Deck, _players: Array<Player>){
