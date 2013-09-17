@@ -1,4 +1,5 @@
 import Card = require("src/card/Card");
+import Suit = require("src/card/Suit");
 
 class Player {
     hand: Array<Card>;
@@ -16,6 +17,19 @@ class Player {
             }
         }
         this.hand = this.hand.concat(cards);
+    }
+
+    owns(card: Card){
+        return this.hand.indexOf(card) !== -1;
+    }
+
+    hasCardsOfSuit(suit: Suit): boolean{
+        for(var i = 0; i < this.hand.length; i++){
+            if(this.hand[i].suit === suit){
+                return true;
+            }
+        }
+        return false;
     }
 }
 

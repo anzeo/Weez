@@ -6,6 +6,7 @@ import Player = require("src/player/Player");
 import Mode = require("src/game/Mode");
 import Bidding = require("src/area/Bidding");
 import Bid = require("src/bid/Bid");
+import Table = require("src/area/Table");
 
 function getPlayerNextOf(player: Player): Player{
     return players[ (players.indexOf(player) + 1) % 4]
@@ -21,6 +22,7 @@ export var
     trump: Suit,
     defaultTrump: Suit,
     bidding: Bidding,
+    table: Table,
     mode:Mode,
     target: number,
 
@@ -48,6 +50,7 @@ export var
         }
 
         trump = bidding.resolvedTrump || defaultTrump;
+        table.setTrump(trump);
         activePlayers = bidding.activePlayers;
         phase = Phase.PLAY;
         target = bidding.target;
@@ -64,6 +67,7 @@ export var
         players = _players;
         dealer = players[0];
         bidding = new Bidding();
+        table = new Table();
         mode = undefined;
         target = 0;
         trump = undefined;

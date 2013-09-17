@@ -1,5 +1,5 @@
 /// <reference path="../def/jasmine.d.ts" />
-import BidAction = require("src/bid/BidAction");
+import BidAction = require("src/action/BidAction");
 import Bid = require("src/bid/Bid");
 import Suit = require("src/card/Suit");
 import Game = require("src/game/Game");
