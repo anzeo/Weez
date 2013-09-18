@@ -20,8 +20,8 @@ class PlayAction {
             return true;
         if(this.card.suit === Game.table.entries[0].item.suit)
             return true;
-        if(this.player.hasCardsOfSuit(this.card.suit))
-            return false;
+        if(!this.player.hasCardsOfSuit(this.card.suit))
+            return true;
 
         return false;
     }
