@@ -19,6 +19,15 @@ class Player {
         this.hand = this.hand.concat(cards);
     }
 
+    /**
+     * Removes given card out of hand
+     * @param card
+     */
+    play(card: Card){
+        if(!this.owns(card)) return;
+        this.hand.splice(this.hand.indexOf(card),1);
+    }
+
     owns(card: Card){
         return this.hand.indexOf(card) !== -1;
     }

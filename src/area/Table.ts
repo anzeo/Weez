@@ -8,6 +8,10 @@ class Table extends Area<Card> {
     setTrump(trump: Suit){
         this.trump = trump;
     }
+
+    getSuitOfCard(i: number): Suit{
+        return this.entries[i].item.suit;
+    }
 }
 
 export = Table;

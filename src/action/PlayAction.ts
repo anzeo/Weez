@@ -16,9 +16,9 @@ class PlayAction {
             return false;
         if(!this.player.owns(this.card))
             return false;
-        if(Game.table.entries.length === 0)
+        if(Game.table.isEmpty())
             return true;
-        if(this.card.suit === Game.table.entries[0].item.suit)
+        if(this.card.suit === Game.table.getSuitOfCard(0))
             return true;
         if(!this.player.hasCardsOfSuit(this.card.suit))
             return true;
@@ -30,6 +30,32 @@ class PlayAction {
         if(this.isValid()){
             Game.table.add(this.player, this.card);
             Game.advanceCurrentPlayer();
+            this.player.play(this.card);
+
+            if(Game.table.entries.length === 4) {
+                // TODO score logic
+                var winningEntry;
+                for(var i = 0; i < 4; i++){
+                    if(!winningEntry){
+                        winningEntry = Game.table.entries[i];
+                        continue;
+                    }
+                    var currentEntry = Game.table.entries[i];
+                    if(currentEntry.item.suit === winningEntry.item.suit){
+                        if(currentEntry.item.value === 1 || (currentEntry.item.value > winningEntry.item.value && winningEntry.item.value !== 1 )){
+                            winningEntry = currentEntry;
+                        }
+                    } else if(currentEntry.item.suit > winningEntry.item.suit || currentEntry.item.suit === Game.table.trump){
+                        winningEntry = currentEntry;
+                    }
+                }
+
+                if(Game.activePlayers.indexOf(winningEntry.player) !== -1){
+                    Game.scoredTicks += 1; // only score if player was active
+                }
+
+                Game.table.entries.length = 0;
+            }
         }
     }
 }

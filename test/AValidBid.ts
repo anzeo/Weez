@@ -11,18 +11,18 @@ import Phase = require("src/game/Phase");
 describe("A valid bid", function(){
 
     beforeEach(function(){
-        Game.setup(new Deck(), [new Player(), new Player(), new Player(), new Player()]);
+        var deck = new Deck();
+        deck.shuffle();
+        Game.setup(deck, [new Player(), new Player(), new Player(), new Player()]);
         Game.deal();
     })
 
     it("is made in the bid phase", function(){
-        Game.setup(new Deck(), [new Player(), new Player(), new Player(), new Player()]);
         var bidAction = new BidAction(Game.players[1], new Bid() );
 
+        Game.phase = Phase.SETUP;
         expect(bidAction.isValid()).toEqual(false);
-
-        Game.deal();
-
+        Game.phase = Phase.BID;
         expect(bidAction.isValid()).toEqual(true);
     });
 

@@ -25,6 +25,7 @@ export var
     table: Table,
     mode:Mode,
     target: number,
+    scoredTicks: number,
 
     deal = function(){
         var cardsToDeal: Array<Card>,
@@ -71,4 +72,5 @@ export var
         mode = undefined;
         target = 0;
         trump = undefined;
+        scoredTicks = 0;
     }

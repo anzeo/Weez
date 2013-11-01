@@ -8,7 +8,9 @@ import Deck = require("src/card/Deck");
 describe("After a game has been dealt", function(){
 
     beforeEach(function(){
-        Game.setup(new Deck(), [new Player(), new Player(), new Player(), new Player()]);
+        var deck = new Deck();
+        deck.shuffle();
+        Game.setup(deck, [new Player(), new Player(), new Player(), new Player()]);
         Game.deal();
     })
 

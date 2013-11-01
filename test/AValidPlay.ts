@@ -13,7 +13,9 @@ import Phase = require("src/game/Phase");
 describe("A play action is valid", function(){
 
     beforeEach(function(){
-        Game.setup(new Deck(), [new Player(), new Player(), new Player(), new Player()]);
+        var deck = new Deck();
+        deck.shuffle();
+        Game.setup(deck, [new Player(), new Player(), new Player(), new Player()]);
         Game.deal();
         var bidActionPlayer2 = new BidAction(Game.players[1], new Bid()),
             bidActionPlayer3 = new BidAction(Game.players[2], new Bid()),
@@ -36,11 +38,14 @@ describe("A play action is valid", function(){
 
     it("If the player is the active player", function(){
         var playActionPlayer2 = new PlayAction(Game.players[1], Game.players[1].hand[0]),
-            playActionPlayer3 = new PlayAction(Game.players[2], Game.players[2].hand[0]);
+            player3 = Game.players[2],
+            playActionPlayer3 = new PlayAction(player3, player3.hand[0]);
 
         expect(playActionPlayer3.isValid()).toEqual(false);
 
         playActionPlayer2.execute();
+
+        spyOn(player3, "hasCardsOfSuit").andReturn(false);
 
         expect(playActionPlayer3.isValid()).toEqual(true);
     })
@@ -65,13 +70,14 @@ describe("A play action is valid", function(){
 
         spyOn(player2, "owns").andReturn(true);
         spyOn(player3, "owns").andReturn(true);
+        spyOn(player3, "hasCardsOfSuit").andReturn(true); // make sure playing a card of another suit will fail the test
 
         playActionPlayer2.execute();
         expect(invalidPlayActionPlayer3.isValid()).toEqual(false);
         expect(validPlayActionPlayer3.isValid()).toEqual(true);
     })
 
-    it("If the played card has another trump as the first card of the round, but the player has no cards left of that trump in his hand", function(){
+    it("If the played card has another suit as the first card of the round, but the player has no cards left of that trump in his hand", function(){
         var player2 = Game.players[1],
             player3 = Game.players[2],
             cardPlayedBy2 = new Card(1,Suit.HEARTS),
