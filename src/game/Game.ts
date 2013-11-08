@@ -62,6 +62,10 @@ export var
         currentPlayer = getPlayerNextOf(currentPlayer);
     },
 
+    isActivePlayer = function(player: Player): boolean {
+        return activePlayers.indexOf(player) !== -1;
+    },
+
     setup = function(_deck: Deck, _players: Array<Player>){
         deck = _deck;
         phase = Phase.SETUP;
@@ -73,4 +77,22 @@ export var
         target = 0;
         trump = undefined;
         scoredTicks = 0;
-    }
+    },
+
+    score = function(){
+        phase = Phase.SCORE;
+
+        var delta = scoredTicks - target,
+            individualScore =  (delta < 0 ? -1 : 1) * (2 + Math.abs(delta)),
+            activePayerRate = (4 - activePlayers.length) / activePlayers.length;
+
+        var currentPlayer : Player;
+        for(var i = 0; i < 4; i++){
+            currentPlayer = players[i];
+            if(activePlayers.indexOf(currentPlayer) !== -1){
+                currentPlayer.score += (activePayerRate * individualScore);
+            } else {
+                currentPlayer.score -= individualScore;
+            }
+        }
+    };

@@ -3,19 +3,14 @@ import Suit = require("src/card/Suit");
 
 class Player {
     hand: Array<Card>;
-    numberOfAces: number;
+    score: number;
 
     constructor(){
         this.hand = [];
-        this.numberOfAces = 0;
+        this.score = 0;
     }
 
     deal(cards: Array<Card>){
-        for(var i = 0; i < cards.length; i++){
-            if(cards[i].value === 1){
-                this.numberOfAces += 1;
-            }
-        }
         this.hand = this.hand.concat(cards);
     }
 

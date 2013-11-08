@@ -50,11 +50,16 @@ class PlayAction {
                     }
                 }
 
-                if(Game.activePlayers.indexOf(winningEntry.player) !== -1){
+                if(Game.isActivePlayer(winningEntry.player)){
                     Game.scoredTicks += 1; // only score if player was active
                 }
 
                 Game.table.entries.length = 0;
+
+                // check for end of game
+                if(Game.deck.cards.length === 52) {
+                    Game.score();
+                }
             }
         }
     }
