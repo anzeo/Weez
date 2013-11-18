@@ -54,10 +54,12 @@ class PlayAction {
                     Game.scoredTicks += 1; // only score if player was active
                 }
 
+                winningEntry.player.hasScoredTricks = true;
+
                 Game.table.entries.length = 0;
 
                 // check for end of game
-                if(Game.deck.cards.length === 52) {
+                if(Game.isEndOfGame()) {
                     Game.score();
                 }
             }

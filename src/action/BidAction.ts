@@ -23,8 +23,13 @@ class BidAction  {
         if(this.bid.mode === Mode.PASS)
             return true;
 
+        // do not allow bids that have a lower priority
+        if(this.bid.mode < Game.bidding.resolvedMode){
+            return false;
+        }
+
         // a maximum of 2 active players are allowed
-        if(Game.bidding.activePlayers.length < 2)
+        if(this.moreActivePlayersAreAllowed())
             return true;
 
         return false;
@@ -41,10 +46,21 @@ class BidAction  {
             if(Game.bidding.needsConfirmation()){
                 Game.currentPlayer = Game.bidding.activePlayers[0];
                 Game.bidding.removeActivePlayerEntry();
-                return;
             } else {
                 Game.play();
             }
+        }
+    }
+
+    moreActivePlayersAreAllowed(): boolean {
+        switch(Game.bidding.resolvedMode){
+            case Mode.NORMAL:
+                return Game.bidding.activePlayers.length < 2;
+                break;
+            case Mode.MISERY:
+                return true;
+            default:
+                return true;
         }
     }
 }

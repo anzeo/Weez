@@ -28,29 +28,33 @@ class Bidding extends Area<Bid> {
         if(!this.resolvedMode){
             this.resolvedMode = bid.mode;
             if(bid.mode !== Mode.PASS){
-                this.resolvedTrump = bid.suit;
-                this.activePlayers.push(player);
-                this.target = 5;
+                this.setResolvedProperties(player,bid);
             }
             return;
         }
 
         if(bid.mode > this.resolvedMode){
-            this.resolvedMode = bid.mode;
-            this.resolvedTrump = bid.suit;
-            this.activePlayers = [player];
-            this.target = 5;
+            this.setResolvedProperties(player, bid, true);
         } else if (bid.mode === this.resolvedMode){
-            switch(bid.mode){
-                case Mode.NORMAL:
-                    this.activePlayers.push(player);
-                    this.target = 8;
-                    break;
-                case Mode.PASS:
-                default:
-                    break;
-            }
+            this.setResolvedProperties(player, bid);
         }
+    }
+
+    setResolvedProperties(player: Player, bid: Bid, reset?: boolean){
+        if(reset){
+            this.activePlayers = [];
+        }
+        this.resolvedMode = bid.mode;
+        this.activePlayers.push(player);
+        this.target = this.getTargetForModeAndPlayers(bid.mode, this.activePlayers.length);
+        this.resolvedTrump = bid.mode === Mode.NORMAL ? bid.suit : undefined;
+    }
+
+    getTargetForModeAndPlayers(mode: Mode, numberOfActivePlayers: number){
+        if(mode !== Mode.NORMAL){
+            return 0;
+        }
+        return numberOfActivePlayers === 1 ? 5 : 8;
     }
 
     /**
@@ -70,7 +74,7 @@ class Bidding extends Area<Bid> {
     }
 
     needsConfirmation(){
-        return !this.hasBeenConfirmed && this.activePlayers.length === 1;
+        return this.resolvedMode === Mode.NORMAL && !this.hasBeenConfirmed && this.activePlayers.length === 1;
     }
 }
 

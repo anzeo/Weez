@@ -50,7 +50,7 @@ export var
             return;
         }
 
-        trump = bidding.resolvedTrump || defaultTrump;
+        trump = mode === Mode.NORMAL ? bidding.resolvedTrump || defaultTrump : undefined; // TODO refactor this in bidding
         table.setTrump(trump);
         activePlayers = bidding.activePlayers;
         phase = Phase.PLAY;
@@ -95,4 +95,26 @@ export var
                 currentPlayer.score -= individualScore;
             }
         }
+    },
+
+    isEndOfGame = function() {
+
+        if(mode === Mode.MISERY){
+            var allActivePlayersBusted = false;
+            for(var i = 0; i < activePlayers.length; i++){
+                if(!activePlayers[i].hasScoredTricks){
+                    allActivePlayersBusted = false;
+                    break;
+                } else {
+                    allActivePlayersBusted = true;
+                }
+
+            }
+
+            if(allActivePlayersBusted){
+                return true;
+            }
+        }
+
+        return deck.cards.length === 52;
     };

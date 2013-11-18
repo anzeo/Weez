@@ -4,6 +4,7 @@ import Suit = require("src/card/Suit");
 class Player {
     hand: Array<Card>;
     score: number;
+    hasScoredTricks: boolean;
 
     constructor(){
         this.hand = [];
