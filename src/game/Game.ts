@@ -50,7 +50,7 @@ export var
             return;
         }
 
-        trump = mode === Mode.NORMAL ? bidding.resolvedTrump || defaultTrump : undefined; // TODO refactor this in bidding
+        trump = mode === Mode.NORMAL || mode === Mode.SOLO ? bidding.resolvedTrump || defaultTrump : undefined; // TODO refactor this in bidding
         table.setTrump(trump);
         activePlayers = bidding.activePlayers;
         phase = Phase.PLAY;
@@ -82,15 +82,21 @@ export var
     score = function(){
         phase = Phase.SCORE;
 
-        var delta = scoredTicks - target,
-            individualScore =  (delta < 0 ? -1 : 1) * (2 + Math.abs(delta)),
-            activePayerRate = (4 - activePlayers.length) / activePlayers.length;
+        var individualScore,
+            activePlayerRate = (4 - activePlayers.length) / activePlayers.length;
+
+        if(mode === Mode.NORMAL){
+            var delta = scoredTicks - target;
+            individualScore =  (delta < 0 ? -1 : 1) * (2 + Math.abs(delta));
+        } else if(mode === Mode.SOLO){
+            individualScore = (scoredTicks < 13 ? -1 : 1) * (defaultTrump === trump ? 30 : 15);
+        }
 
         var currentPlayer : Player;
         for(var i = 0; i < 4; i++){
             currentPlayer = players[i];
             if(activePlayers.indexOf(currentPlayer) !== -1){
-                currentPlayer.score += (activePayerRate * individualScore);
+                currentPlayer.score += (activePlayerRate * individualScore);
             } else {
                 currentPlayer.score -= individualScore;
             }
@@ -116,5 +122,17 @@ export var
             }
         }
 
+        if(mode === Mode.SOLO){
+            return  (deck.cards.length / 4) !== scoredTicks;
+        }
+
+
         return deck.cards.length === 52;
+    },
+
+    clearTable = function(): void {
+        for(var i = 0; i < 4; i++){
+            deck.cards.push(table.entries[i].item);
+        }
+        table.entries = [];
     };

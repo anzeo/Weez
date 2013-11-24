@@ -32,6 +32,10 @@ class BidAction  {
         if(this.moreActivePlayersAreAllowed())
             return true;
 
+        if(this.bid.mode === Mode.SOLO && Game.bidding.resolvedTrump !== Game.defaultTrump && (this.bid.suit > Game.bidding.resolvedTrump || this.bid.suit === Game.defaultTrump) ){
+            return true;
+        }
+
         return false;
     }
 
@@ -56,6 +60,9 @@ class BidAction  {
         switch(Game.bidding.resolvedMode){
             case Mode.NORMAL:
                 return Game.bidding.activePlayers.length < 2;
+                break;
+            case Mode.SOLO:
+                return Game.bidding.activePlayers.length < 1;
                 break;
             case Mode.MISERY:
                 return true;

@@ -47,14 +47,17 @@ class Bidding extends Area<Bid> {
         this.resolvedMode = bid.mode;
         this.activePlayers.push(player);
         this.target = this.getTargetForModeAndPlayers(bid.mode, this.activePlayers.length);
-        this.resolvedTrump = bid.mode === Mode.NORMAL ? bid.suit : undefined;
+        this.resolvedTrump = bid.suit;
     }
 
     getTargetForModeAndPlayers(mode: Mode, numberOfActivePlayers: number){
-        if(mode !== Mode.NORMAL){
-            return 0;
+        if(mode === Mode.NORMAL){
+            return numberOfActivePlayers === 1 ? 5 : 8;
         }
-        return numberOfActivePlayers === 1 ? 5 : 8;
+        if(mode === Mode.SOLO){
+            return 13;
+        }
+        return 0;
     }
 
     /**

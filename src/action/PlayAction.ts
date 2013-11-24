@@ -56,7 +56,7 @@ class PlayAction {
 
                 winningEntry.player.hasScoredTricks = true;
 
-                Game.table.entries.length = 0;
+                Game.clearTable();
 
                 // check for end of game
                 if(Game.isEndOfGame()) {

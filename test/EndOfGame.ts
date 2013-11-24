@@ -5,6 +5,8 @@ import Player = require("src/player/Player");
 import Phase = require("src/game/Phase");
 import PlayAction = require("src/action/PlayAction");
 import Mode = require("src/game/Mode");
+import Card = require("src/card/Card");
+import Suit = require("src/card/Suit");
 
 describe("A game is scored", function(){
     it("after all cards have been played", function(){
@@ -19,6 +21,7 @@ describe("A game is scored", function(){
 
         // mock game is in final turn
         var lastTrick = deck.cards.slice(0,4);
+        Game.deck.cards.splice(0,4);
 
         // play each action, spy to be valid
         for(var i = 0; i < 4; i++){
@@ -94,6 +97,40 @@ describe("A game is scored", function(){
 
             expect(Game.phase).toEqual(Phase.SCORE);
         });
-    })
+    });
+
+    describe("when the game is in solo mode", function(){
+        it("and the active player misses a trick", function(){
+            var  deck = new Deck();
+            deck.shuffle();
+            Game.setup(deck,[new Player(), new Player(),new Player(),new Player()]);
+
+            Game.deal();
+
+            // mock phase & mode
+            Game.phase = Phase.PLAY;
+            Game.mode = Mode.SOLO;
+
+            Game.activePlayers = [Game.players[0]];
+
+            // mock player's actions
+            var player2Action = new PlayAction(Game.players[1], new Card(1, Game.defaultTrump));
+            var player3Action = new PlayAction(Game.players[2], new Card(2, Game.defaultTrump));
+            var player4Action = new PlayAction(Game.players[3], new Card(3, Game.defaultTrump));
+            var player1Action = new PlayAction(Game.players[0], new Card(4, Game.defaultTrump));
+
+            spyOn(player1Action, "isValid").andReturn(true);
+            spyOn(player2Action, "isValid").andReturn(true);
+            spyOn(player3Action, "isValid").andReturn(true);
+            spyOn(player4Action, "isValid").andReturn(true);
+
+            player2Action.execute();
+            player3Action.execute();
+            player4Action.execute();
+            player1Action.execute();
+
+            expect(Game.phase).toEqual(Phase.SCORE);
+        });
+    });
 });
 

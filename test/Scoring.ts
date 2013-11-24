@@ -3,6 +3,7 @@ import Game = require("src/game/Game");
 import Deck = require("src/card/Deck");
 import Player = require("src/player/Player");
 import Phase = require("src/game/Phase");
+import Mode = require("src/game/Mode");
 
 describe("Players are assigned a score", function(){
 
@@ -10,7 +11,8 @@ describe("Players are assigned a score", function(){
         var deck = new Deck();
         deck.shuffle();
         Game.setup(deck,[new Player(), new Player(),new Player(),new Player()]);
-        // mock phase
+        // mock phase & mode
+        Game.mode = Mode.NORMAL;
         Game.phase = Phase.PLAY;
     });
 

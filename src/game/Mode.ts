@@ -1,7 +1,8 @@
 enum Mode {
     PASS,
     NORMAL,
-    MISERY
+    MISERY,
+    SOLO
 }
 
 export = Mode;
