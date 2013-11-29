@@ -36,6 +36,10 @@ class BidAction  {
             return true;
         }
 
+        if(this.bid.mode === Mode.ABONDANCE && Game.bidding.resolvedTrump !== Game.defaultTrump && (this.bid.suit > Game.bidding.resolvedTrump || this.bid.suit === Game.defaultTrump) ){
+            return true;
+        }
+
         return false;
     }
 
@@ -64,8 +68,11 @@ class BidAction  {
             case Mode.SOLO:
                 return Game.bidding.activePlayers.length < 1;
                 break;
+            case Mode.ABONDANCE:
+                return Game.bidding.activePlayers.length < 1;
+                break;
             case Mode.MISERY:
-                return true;
+            case Mode.PASS:
             default:
                 return true;
         }
