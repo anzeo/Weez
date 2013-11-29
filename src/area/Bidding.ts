@@ -51,13 +51,16 @@ class Bidding extends Area<Bid> {
     }
 
     getTargetForModeAndPlayers(mode: Mode, numberOfActivePlayers: number){
-        if(mode === Mode.NORMAL){
-            return numberOfActivePlayers === 1 ? 5 : 8;
+         switch(mode){
+            case Mode.NORMAL:
+                return numberOfActivePlayers === 1 ? 5 : 8;
+            case Mode.SOLO:
+                return 13;
+             case Mode.ABONDANCE:
+                 return 9;
+            default:
+                return 0;
         }
-        if(mode === Mode.SOLO){
-            return 13;
-        }
-        return 0;
     }
 
     /**

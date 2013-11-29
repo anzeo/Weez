@@ -50,7 +50,7 @@ export var
             return;
         }
 
-        trump = mode === Mode.NORMAL || mode === Mode.SOLO ? bidding.resolvedTrump || defaultTrump : undefined; // TODO refactor this in bidding
+        trump = !(mode === Mode.PASS || mode === Mode.MISERY) ? bidding.resolvedTrump || defaultTrump : undefined; // TODO refactor this in bidding
         table.setTrump(trump);
         activePlayers = bidding.activePlayers;
         phase = Phase.PLAY;
@@ -90,6 +90,9 @@ export var
             individualScore =  (delta < 0 ? -1 : 1) * (2 + Math.abs(delta));
         } else if(mode === Mode.SOLO){
             individualScore = (scoredTicks < 13 ? -1 : 1) * (defaultTrump === trump ? 30 : 15);
+        } else if(mode === Mode.MISERY){
+            scoreMiseryGame();
+            return;
         }
 
         var currentPlayer : Player;
@@ -101,6 +104,44 @@ export var
                 currentPlayer.score -= individualScore;
             }
         }
+    },
+
+    scoreMiseryGame = function(){
+        var activePlayersThatHaveLost: Array<Player> = filterArray(activePlayers, function(player: Player){
+                return player.hasScoredTricks;
+            }),
+            winningActivePlayers: Array<Player> = filterArray(activePlayers, function(player: Player){
+               return !player.hasScoredTricks;
+            }),
+            notActivePlayers: Array<Player> = filterArray(players,function(player: Player){
+                return activePlayers.indexOf(player) === -1;
+            });
+
+        var playersToDecreaseScoreFrom: Array<Player> = activePlayersThatHaveLost.length > 0 ? activePlayersThatHaveLost: notActivePlayers,
+            playersToIncreaseScoreFor: Array<Player> = winningActivePlayers.length > 0 ? winningActivePlayers : notActivePlayers,
+            individualScore = 5,
+            activePlayerRate = playersToDecreaseScoreFrom.length / playersToIncreaseScoreFor.length,
+            notActivePlayerRate = 1,
+            currentPlayer : Player;
+
+        if(playersToIncreaseScoreFor.length === 0){
+            return;
+        }
+
+        if(activePlayerRate < 1){
+            notActivePlayerRate = 1/activePlayerRate;
+            activePlayerRate = 1;
+        }
+
+        for(var i = 0; i < 4; i++){
+            currentPlayer = players[i];
+            if(playersToIncreaseScoreFor.indexOf(currentPlayer) !== -1){
+                currentPlayer.score += (activePlayerRate * individualScore);
+            } else if(playersToDecreaseScoreFrom.indexOf(currentPlayer) !== -1) {
+                currentPlayer.score -= (notActivePlayerRate * individualScore);
+            }
+        }
+
     },
 
     isEndOfGame = function() {
@@ -136,3 +177,14 @@ export var
         }
         table.entries = [];
     };
+
+// TODO temporary solution, will need to decide on what we're going to use later on
+function filterArray(array: Array, callback: (item) => boolean): Array{
+    var filteredResult = [];
+    for(var i =0; i < array.length; i++){
+        if(callback(array[i])){
+            filteredResult.push(array[i]);
+        }
+    }
+    return filteredResult;
+}
