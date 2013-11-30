@@ -1,6 +1,5 @@
 /// <reference path="../def/jasmine.d.ts" />
-import BidAction = require("src/action/BidAction");
-import Bid = require("src/bid/Bid");
+import ActionFactory = require("src/action/ActionFactory");
 import Suit = require("src/card/Suit");
 import Game = require("src/game/Game");
 import Mode = require("src/game/Mode");
@@ -18,7 +17,7 @@ describe("A valid bid", function(){
     });
 
     it("is made in the bid phase", function(){
-        var bidAction = new BidAction(Game.players[1], new Bid() );
+        var bidAction = ActionFactory.createNormalBidAction(Game.players[1]);
 
         Game.phase = Phase.SETUP;
         expect(bidAction.isValid()).toEqual(false);
@@ -27,8 +26,8 @@ describe("A valid bid", function(){
     });
 
     it("is made in the current player's turn", function(){
-        var bidActionPlayer1 = new BidAction(Game.players[1], new Bid()),
-            bidActionPlayer2 = new BidAction(Game.players[2], new Bid());
+        var bidActionPlayer1 = ActionFactory.createNormalBidAction(Game.players[1]),
+            bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[2]);
 
         expect(bidActionPlayer2.isValid()).toEqual(false);
 
@@ -38,7 +37,7 @@ describe("A valid bid", function(){
     });
 
     it("can be made only once per player", function(){
-        var bidAction = new BidAction(Game.players[1], new Bid() );
+        var bidAction = ActionFactory.createNormalBidAction(Game.players[1]);
 
         expect(bidAction.isValid()).toEqual(true);
 
@@ -48,10 +47,10 @@ describe("A valid bid", function(){
     });
 
     it("will only be resolved if all 4 players have bid", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid()),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid()),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
 
         var expectedTrump = Game.defaultTrump;
 

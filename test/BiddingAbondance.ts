@@ -1,7 +1,5 @@
 /// <reference path="../def/jasmine.d.ts" />
-import BidAction = require("src/action/BidAction");
-import AbondanceBidAction = require("src/action/AbondanceBidAction");
-import Bid = require("src/bid/Bid");
+import ActionFactory = require("src/action/ActionFactory");
 import Suit = require("src/card/Suit");
 import Game = require("src/game/Game");
 import Mode = require("src/game/Mode");
@@ -18,10 +16,10 @@ describe("A valid abondance bid", function(){
     });
 
     it("is valid if the current resolved mode is normal", function(){
-        var player2BidAction = new BidAction(Game.players[1], new Bid());
-        var player3BidAction = new AbondanceBidAction(Game.players[2], Suit.CLUBS);
-        var player4BidAction = new BidAction(Game.players[3], new Bid(Mode.PASS));
-        var player1BidAction = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var player2BidAction = ActionFactory.createNormalBidAction(Game.players[1]);
+        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.CLUBS);
+        var player4BidAction = ActionFactory.createPassBidAction(Game.players[3]);
+        var player1BidAction = ActionFactory.createPassBidAction(Game.players[0]);
 
         player2BidAction.execute();
         expect(player3BidAction.isValid()).toEqual(true);
@@ -32,8 +30,8 @@ describe("A valid abondance bid", function(){
     });
 
     it("can be resolved with only one active player", function(){
-        var player2BidAction = new AbondanceBidAction(Game.players[1], Suit.CLUBS);
-        var player3BidAction = new AbondanceBidAction(Game.players[2], Suit.CLUBS);
+        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.CLUBS);
+        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.CLUBS);
 
         player2BidAction.execute();
         expect(player3BidAction.isValid()).toEqual(false);
@@ -42,8 +40,18 @@ describe("A valid abondance bid", function(){
     it("has precedence over another abondance bid in case it is made in the default trump", function(){
         Game.defaultTrump = Suit.CLUBS;
 
-        var player2BidAction = new AbondanceBidAction(Game.players[1], Suit.HEARTS);
-        var player3BidAction = new AbondanceBidAction(Game.players[2], Suit.CLUBS);
+        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.HEARTS);
+        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.CLUBS);
+
+        player2BidAction.execute();
+        expect(player3BidAction.isValid()).toEqual(true);
+    });
+
+    it("has precedence over another abondance bid in case it is made in a higher trump", function(){
+        Game.defaultTrump = Suit.SPADES;
+
+        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.CLUBS);
+        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.DIAMONDS);
 
         player2BidAction.execute();
         expect(player3BidAction.isValid()).toEqual(true);
@@ -52,10 +60,10 @@ describe("A valid abondance bid", function(){
     it("is resolved with the same trump of the winning bid", function(){
         Game.defaultTrump = Suit.CLUBS;
 
-        var player2BidAction = new AbondanceBidAction(Game.players[1], Suit.DIAMONDS);
-        var player3BidAction = new BidAction(Game.players[2], new Bid(Mode.PASS));
-        var player4BidAction = new BidAction(Game.players[3], new Bid(Mode.PASS));
-        var player1BidAction = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.DIAMONDS);
+        var player3BidAction = ActionFactory.createPassBidAction(Game.players[2]);
+        var player4BidAction = ActionFactory.createPassBidAction(Game.players[3]);
+        var player1BidAction = ActionFactory.createPassBidAction(Game.players[0]);
 
         player2BidAction.execute();
         player3BidAction.execute();

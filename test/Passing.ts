@@ -1,6 +1,5 @@
 /// <reference path="../def/jasmine.d.ts" />
-import BidAction = require("src/action/BidAction");
-import Bid = require("src/bid/Bid");
+import ActionFactory = require("src/action/ActionFactory");
 import Suit = require("src/card/Suit");
 import Game = require("src/game/Game");
 import Mode = require("src/game/Mode");
@@ -18,10 +17,10 @@ describe("A game can be passed", function(){
     });
 
     it("in case all players have passed", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid(Mode.PASS)),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid(Mode.PASS)),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var bidActionPlayer2 = ActionFactory.createPassBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createPassBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
 
         bidActionPlayer2.execute();
         bidActionPlayer3.execute();

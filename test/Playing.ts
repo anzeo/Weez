@@ -1,10 +1,8 @@
 /// <reference path="../def/jasmine.d.ts" />
 import Game = require("src/game/Game");
-import PlayAction = require("src/action/PlayAction");
 import Player = require("src/player/Player");
 import Deck = require("src/card/Deck");
-import BidAction = require("src/action/BidAction");
-import Bid = require("src/bid/Bid");
+import ActionFactory = require("src/action/ActionFactory");
 import Mode = require("src/game/Mode");
 import Card = require("src/card/Card");
 import Suit = require("src/card/Suit");
@@ -16,10 +14,10 @@ describe("If a play action is executed", function(){
         deck.shuffle();
         Game.setup(deck,[new Player(), new Player(), new Player(), new Player()]);
         Game.deal();
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid()),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid()),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
 
         bidActionPlayer2.execute();
         bidActionPlayer3.execute();
@@ -30,7 +28,7 @@ describe("If a play action is executed", function(){
     it("The played card is added to the table", function(){
         var player = Game.players[1],
             card = player.hand[0],
-            playAction = new PlayAction(player, card);
+            playAction = ActionFactory.createPlayAction(player, card);
 
         expect(playAction.isValid()).toBe(true);
         playAction.execute();
@@ -41,7 +39,7 @@ describe("If a play action is executed", function(){
     it("The played card is removed from the player's hand", function(){
         var player = Game.players[1],
             card = player.hand[0],
-            playAction = new PlayAction(player, card);
+            playAction = ActionFactory.createPlayAction(player, card);
 
         expect(playAction.isValid()).toBe(true);
         playAction.execute();
@@ -57,7 +55,7 @@ describe("If a play action is executed", function(){
 
         it("And the points are not increased in case the player scoring the tick was not an active player", function(){
             var player = Game.players[3],
-                playAction = new PlayAction(player, new Card(1, Game.trump));
+                playAction = ActionFactory.createPlayAction(player, new Card(1, Game.trump));
 
             spyOn(playAction, "isValid").andReturn(true);
             playAction.execute();
@@ -69,7 +67,7 @@ describe("If a play action is executed", function(){
 
         it("And the points are increased in case the player scoring the tick was an active player", function(){
             var player = Game.players[3],
-                playAction = new PlayAction(player, new Card(2, Suit.HEARTS));
+                playAction = ActionFactory.createPlayAction(player, new Card(2, Suit.HEARTS));
 
             spyOn(playAction, "isValid").andReturn(true);
             playAction.execute();
@@ -81,7 +79,7 @@ describe("If a play action is executed", function(){
 
         it("And the table is cleared", function(){
             var player = Game.players[3],
-                playAction = new PlayAction(player, new Card(2, Suit.HEARTS));
+                playAction = ActionFactory.createPlayAction(player, new Card(2, Suit.HEARTS));
 
             spyOn(playAction, "isValid").andReturn(true);
             playAction.execute();

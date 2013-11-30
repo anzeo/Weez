@@ -1,6 +1,5 @@
 /// <reference path="../def/jasmine.d.ts" />
-import BidAction = require("src/action/BidAction");
-import Bid = require("src/bid/Bid");
+import ActionFactory = require("src/action/ActionFactory");
 import Suit = require("src/card/Suit");
 import Game = require("src/game/Game");
 import Mode = require("src/game/Mode");
@@ -18,18 +17,18 @@ describe("A normal bid", function(){
     });
 
     it("is not valid in case a previous bid was made for misery", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid(Mode.MISERY)),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid());
+        var bidActionPlayer2 = ActionFactory.createMiseryBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]);
 
         bidActionPlayer2.execute();
         expect(bidActionPlayer3.isValid()).toEqual(false);
     });
 
     it("does not allow more than 2 active players", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid()),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid()),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid());
+        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createNormalBidAction(Game.players[0]);
 
         bidActionPlayer2.execute();
         bidActionPlayer3.execute();
@@ -38,11 +37,11 @@ describe("A normal bid", function(){
     });
 
     it("has to be confirmed in case there's only one active player", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid()),
-            bidActionPlayer2Pass = new BidAction(Game.players[1], new Bid(Mode.PASS)),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid(Mode.PASS)),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
+            bidActionPlayer2Pass = ActionFactory.createPassBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createPassBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
 
         bidActionPlayer2.execute();
         bidActionPlayer3.execute();
@@ -60,10 +59,10 @@ describe("A normal bid", function(){
     });
 
     it("can be resolved with 2 active players at a target of 8", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid()),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid()),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
 
         bidActionPlayer2.execute();
         bidActionPlayer3.execute();
@@ -74,10 +73,10 @@ describe("A normal bid", function(){
     });
 
     it("can be resolved with 1 active players at a target of 5", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid(Mode.PASS)),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid(Mode.PASS)),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid()),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var bidActionPlayer2 = ActionFactory.createPassBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createPassBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createNormalBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
 
         bidActionPlayer2.execute();
         bidActionPlayer3.execute();
@@ -89,10 +88,10 @@ describe("A normal bid", function(){
     });
 
     it("is always resolved with the default trump", function(){
-        var bidActionPlayer2 = new BidAction(Game.players[1], new Bid(Mode.PASS)),
-            bidActionPlayer3 = new BidAction(Game.players[2], new Bid()),
-            bidActionPlayer4 = new BidAction(Game.players[3], new Bid(Mode.PASS)),
-            bidActionPlayer1 = new BidAction(Game.players[0], new Bid());
+        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
+            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
+            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
+            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
 
         bidActionPlayer2.execute();
         bidActionPlayer3.execute();

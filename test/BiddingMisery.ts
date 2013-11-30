@@ -1,6 +1,5 @@
 /// <reference path="../def/jasmine.d.ts" />
-import BidAction = require("src/action/BidAction");
-import Bid = require("src/bid/Bid");
+import ActionFactory = require("src/action/ActionFactory");
 import Suit = require("src/card/Suit");
 import Game = require("src/game/Game");
 import Mode = require("src/game/Mode");
@@ -17,10 +16,10 @@ describe("A valid misery bid", function(){
     });
 
     it("can be made any time", function(){
-        var player2BidAction = new BidAction(Game.players[1], new Bid());
-        var player3BidAction = new BidAction(Game.players[2], new Bid(Mode.MISERY));
-        var player4BidAction = new BidAction(Game.players[3], new Bid(Mode.MISERY));
-        var player1BidAction = new BidAction(Game.players[0], new Bid(Mode.MISERY));
+        var player2BidAction = ActionFactory.createNormalBidAction(Game.players[1]);
+        var player3BidAction = ActionFactory.createMiseryBidAction(Game.players[2]);
+        var player4BidAction = ActionFactory.createMiseryBidAction(Game.players[3]);
+        var player1BidAction = ActionFactory.createMiseryBidAction(Game.players[0]);
 
         player2BidAction.execute();
         expect(player3BidAction.isValid()).toEqual(true);
@@ -31,10 +30,10 @@ describe("A valid misery bid", function(){
     });
 
     it("can be resolved with up to 4 active players at a target of 0", function(){
-        var player2BidAction = new BidAction(Game.players[1], new Bid(Mode.MISERY));
-        var player3BidAction = new BidAction(Game.players[2], new Bid(Mode.MISERY));
-        var player4BidAction = new BidAction(Game.players[3], new Bid(Mode.MISERY));
-        var player1BidAction = new BidAction(Game.players[0], new Bid(Mode.MISERY));
+        var player2BidAction = ActionFactory.createMiseryBidAction(Game.players[1]);
+        var player3BidAction = ActionFactory.createMiseryBidAction(Game.players[2]);
+        var player4BidAction = ActionFactory.createMiseryBidAction(Game.players[3]);
+        var player1BidAction = ActionFactory.createMiseryBidAction(Game.players[0]);
 
         player2BidAction.execute();
         player3BidAction.execute();
@@ -46,10 +45,10 @@ describe("A valid misery bid", function(){
     });
 
     it("is always resolved with a target of 0 and no trump", function(){
-        var player2BidAction = new BidAction(Game.players[1], new Bid(Mode.MISERY));
-        var player3BidAction = new BidAction(Game.players[2], new Bid(Mode.PASS));
-        var player4BidAction = new BidAction(Game.players[3], new Bid(Mode.PASS));
-        var player1BidAction = new BidAction(Game.players[0], new Bid(Mode.PASS));
+        var player2BidAction = ActionFactory.createMiseryBidAction(Game.players[1]);
+        var player3BidAction = ActionFactory.createPassBidAction(Game.players[2]);
+        var player4BidAction = ActionFactory.createPassBidAction(Game.players[3]);
+        var player1BidAction = ActionFactory.createPassBidAction(Game.players[0]);
 
         player2BidAction.execute();
         player3BidAction.execute();

@@ -28,15 +28,17 @@ class BidAction  {
             return false;
         }
 
-        // a maximum of 2 active players are allowed
-        if(this.moreActivePlayersAreAllowed())
-            return true;
-
-        if(this.bid.mode === Mode.SOLO && Game.bidding.resolvedTrump !== Game.defaultTrump && (this.bid.suit > Game.bidding.resolvedTrump || this.bid.suit === Game.defaultTrump) ){
+        // if the new mode is different
+        if(Game.bidding.resolvedMode !== this.bid.mode){
             return true;
         }
 
-        if(this.bid.mode === Mode.ABONDANCE && Game.bidding.resolvedTrump !== Game.defaultTrump && (this.bid.suit > Game.bidding.resolvedTrump || this.bid.suit === Game.defaultTrump) ){
+        // check if more active players a re allowed
+        if(this.moreActivePlayersAreAllowed()){
+            return true;
+        }
+
+        if( (this.bid.mode === Mode.SOLO || this.bid.mode === Mode.ABONDANCE) && this.trumpIsHigherOrDefault()){
             return true;
         }
 
@@ -61,21 +63,11 @@ class BidAction  {
     }
 
     moreActivePlayersAreAllowed(): boolean {
-        switch(Game.bidding.resolvedMode){
-            case Mode.NORMAL:
-                return Game.bidding.activePlayers.length < 2;
-                break;
-            case Mode.SOLO:
-                return Game.bidding.activePlayers.length < 1;
-                break;
-            case Mode.ABONDANCE:
-                return Game.bidding.activePlayers.length < 1;
-                break;
-            case Mode.MISERY:
-            case Mode.PASS:
-            default:
-                return true;
-        }
+        return Game.bidding.activePlayers.length < 2;
+    }
+
+    trumpIsHigherOrDefault(): boolean {
+        return Game.bidding.resolvedTrump !== Game.defaultTrump && (this.bid.suit > Game.bidding.resolvedTrump || this.bid.suit === Game.defaultTrump)
     }
 }
 

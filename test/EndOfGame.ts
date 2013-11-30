@@ -3,7 +3,7 @@ import Game = require("src/game/Game");
 import Deck = require("src/card/Deck");
 import Player = require("src/player/Player");
 import Phase = require("src/game/Phase");
-import PlayAction = require("src/action/PlayAction");
+import ActionFactory = require("src/action/ActionFactory");
 import Mode = require("src/game/Mode");
 import Card = require("src/card/Card");
 import Suit = require("src/card/Suit");
@@ -25,7 +25,7 @@ describe("A game is scored", function(){
 
         // play each action, spy to be valid
         for(var i = 0; i < 4; i++){
-            var action = new PlayAction(Game.players[i], lastTrick[i]);
+            var action = ActionFactory.createPlayAction(Game.players[i], lastTrick[i]);
 
             spyOn(action, "isValid").andReturn(true);
             action.execute();
@@ -56,7 +56,7 @@ describe("A game is scored", function(){
 
             // now the game should end after the next round has finished
             for(var i = 0; i < 4; i++){
-                var action = new PlayAction(Game.players[i], Game.players[i].hand[0]);
+                var action = ActionFactory.createPlayAction(Game.players[i], Game.players[i].hand[0]);
 
                 spyOn(action, "isValid").andReturn(true);
                 action.execute();
@@ -72,7 +72,7 @@ describe("A game is scored", function(){
 
             // the game should only finish if ALL active players have scored at least a trick
             for(var i = 0; i < 4; i++){
-                var action = new PlayAction(Game.players[i], Game.players[i].hand[0]);
+                var action = ActionFactory.createPlayAction(Game.players[i], Game.players[i].hand[0]);
 
                 spyOn(action, "isValid").andReturn(true);
                 action.execute();
@@ -89,7 +89,7 @@ describe("A game is scored", function(){
 
             // the game should only finish if ALL active players have scored at least a trick
             for(var i = 0; i < 4; i++){
-                var action = new PlayAction(Game.players[i], Game.players[i].hand[0]);
+                var action = ActionFactory.createPlayAction(Game.players[i], Game.players[i].hand[0]);
 
                 spyOn(action, "isValid").andReturn(true);
                 action.execute();
@@ -114,10 +114,10 @@ describe("A game is scored", function(){
             Game.activePlayers = [Game.players[0]];
 
             // mock player's actions
-            var player2Action = new PlayAction(Game.players[1], new Card(1, Game.defaultTrump));
-            var player3Action = new PlayAction(Game.players[2], new Card(2, Game.defaultTrump));
-            var player4Action = new PlayAction(Game.players[3], new Card(3, Game.defaultTrump));
-            var player1Action = new PlayAction(Game.players[0], new Card(4, Game.defaultTrump));
+            var player2Action = ActionFactory.createPlayAction(Game.players[1], new Card(1, Game.defaultTrump));
+            var player3Action = ActionFactory.createPlayAction(Game.players[2], new Card(2, Game.defaultTrump));
+            var player4Action = ActionFactory.createPlayAction(Game.players[3], new Card(3, Game.defaultTrump));
+            var player1Action = ActionFactory.createPlayAction(Game.players[0], new Card(4, Game.defaultTrump));
 
             spyOn(player1Action, "isValid").andReturn(true);
             spyOn(player2Action, "isValid").andReturn(true);
