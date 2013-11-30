@@ -47,7 +47,11 @@ class BidAction  {
 
     execute(): void {
         if(this.isValid()){
-            Game.bidding.add(this.player, this.bid);
+            var isNewWinner = Game.bidding.add(this.player, this.bid);
+            if(isNewWinner){
+                Game.bidding.setResolvedProperties(this.player, this.bid.mode, this.getTarget(), this.bid.suit);
+            }
+
             if(Game.bidding.entries.length < 4){
                 Game.advanceCurrentPlayer();
                 return;
@@ -64,6 +68,11 @@ class BidAction  {
 
     moreActivePlayersAreAllowed(): boolean {
         return Game.bidding.activePlayers.length < 2;
+    }
+
+    getTarget(): number {
+        // if there is already an active player, this means the new target should be 8.
+        return Game.bidding.activePlayers.length === 1 ? 8 : 5;
     }
 
     trumpIsHigherOrDefault(): boolean {

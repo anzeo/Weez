@@ -50,7 +50,7 @@ export var
             return;
         }
 
-        trump = !(mode === Mode.PASS || mode === Mode.MISERY) ? bidding.resolvedTrump || defaultTrump : undefined; // TODO refactor this in bidding
+        trump = bidding.resolvedTrump;
         table.setTrump(trump);
         activePlayers = bidding.activePlayers;
         phase = Phase.PLAY;

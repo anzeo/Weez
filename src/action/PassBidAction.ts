@@ -11,6 +11,10 @@ class PassBidAction extends BidAction {
     moreActivePlayersAreAllowed(){
         return true;
     }
+
+    getTarget(){
+        return 0;
+    }
 }
 
 export = PassBidAction;

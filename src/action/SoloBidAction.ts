@@ -14,6 +14,10 @@ class SoloBidAction extends BidAction {
     moreActivePlayersAreAllowed(): boolean {
         return Game.bidding.activePlayers.length < 1
     }
+
+    getTarget(){
+        return 13;
+    }
 }
 
 export = SoloBidAction;

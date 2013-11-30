@@ -20,47 +20,36 @@ class Bidding extends Area<Bid> {
 
     add(player:Player, bid: Bid){
         super.add(player, bid);
-        this.checkEntry(player, bid);
+        return this.checkIfEntryIsNewWinner(player, bid);
     }
 
-    checkEntry(player: Player, bid: Bid){
+    checkIfEntryIsNewWinner(player: Player, bid: Bid): boolean{
         // if resolvedMode is empty, this is the first entry we're checking
         if(!this.resolvedMode){
             this.resolvedMode = bid.mode;
-            if(bid.mode !== Mode.PASS){
-                this.setResolvedProperties(player,bid);
-            }
-            return;
+            return bid.mode !== Mode.PASS ? true : false;
         }
 
         if(bid.mode > this.resolvedMode){
-            this.setResolvedProperties(player, bid, true);
+            this.reset();
+            return true;
         } else if (bid.mode === this.resolvedMode){
-            this.setResolvedProperties(player, bid);
+            return true;
         }
+        return false;
     }
 
-    setResolvedProperties(player: Player, bid: Bid, reset?: boolean){
-        if(reset){
-            this.activePlayers = [];
-        }
-        this.resolvedMode = bid.mode;
+    reset(){
+        this.activePlayers = [];
+        this.resolvedMode = undefined;
+        this.target = undefined;
+    }
+
+    setResolvedProperties(player: Player, mode: Mode, target: number, trump: Suit){
+        this.resolvedMode = mode;
         this.activePlayers.push(player);
-        this.target = this.getTargetForModeAndPlayers(bid.mode, this.activePlayers.length);
-        this.resolvedTrump = bid.suit;
-    }
-
-    getTargetForModeAndPlayers(mode: Mode, numberOfActivePlayers: number){
-         switch(mode){
-            case Mode.NORMAL:
-                return numberOfActivePlayers === 1 ? 5 : 8;
-            case Mode.SOLO:
-                return 13;
-             case Mode.ABONDANCE:
-                 return 9;
-            default:
-                return 0;
-        }
+        this.target = target;
+        this.resolvedTrump = trump;
     }
 
     /**
@@ -73,9 +62,7 @@ class Bidding extends Area<Bid> {
                 this.entries.splice(i,1);
             }
         }
-        this.activePlayers = [];
-        delete this.resolvedMode;
-        delete this.target;
+        this.reset();
         this.hasBeenConfirmed = true;
     }
 

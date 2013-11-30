@@ -15,6 +15,10 @@ class AbondanceBidAction extends BidAction {
     moreActivePlayersAreAllowed(){
         return Game.bidding.activePlayers.length < 1;
     }
+
+    getTarget(){
+        return 9;
+    }
 }
 
 export = AbondanceBidAction;
