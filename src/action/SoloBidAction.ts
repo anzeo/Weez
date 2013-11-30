@@ -3,6 +3,7 @@ import Player = require("src/player/Player");
 import Bid = require("src/bid/Bid");
 import Mode = require("src/game/Mode");
 import Suit = require("src/card/Suit");
+import SoloCalculator = require("src/calculator/SoloCalculator");
 
 import Game = require("src/game/Game");
 
@@ -17,6 +18,10 @@ class SoloBidAction extends BidAction {
 
     getTarget(){
         return 13;
+    }
+
+    getCalculator(){
+        return new SoloCalculator();
     }
 }
 

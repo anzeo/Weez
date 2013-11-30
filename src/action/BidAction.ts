@@ -3,6 +3,7 @@ import Player = require("src/player/Player");
 import Game = require("src/game/Game");
 import Phase = require("src/game/Phase");
 import Mode = require("src/game/Mode");
+import DefaultCalculator = require("src/calculator/DefaultCalculator")
 
 class BidAction  {
 
@@ -49,7 +50,7 @@ class BidAction  {
         if(this.isValid()){
             var isNewWinner = Game.bidding.add(this.player, this.bid);
             if(isNewWinner){
-                Game.bidding.setResolvedProperties(this.player, this.bid.mode, this.getTarget(), this.bid.suit);
+                Game.bidding.setResolvedProperties(this.player, this.bid.mode, this.getTarget(), this.bid.suit, this.getCalculator());
             }
 
             if(Game.bidding.entries.length < 4){
@@ -73,6 +74,10 @@ class BidAction  {
     getTarget(): number {
         // if there is already an active player, this means the new target should be 8.
         return Game.bidding.activePlayers.length === 1 ? 8 : 5;
+    }
+
+    getCalculator(): DefaultCalculator {
+        return new DefaultCalculator();
     }
 
     trumpIsHigherOrDefault(): boolean {

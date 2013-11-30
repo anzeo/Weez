@@ -2,6 +2,7 @@ import BidAction = require("src/action/BidAction");
 import Player = require("src/player/Player");
 import Bid = require("src/bid/Bid");
 import Mode = require("src/game/Mode");
+import MiseryCalculator = require("src/calculator/MiseryCalculator");
 
 class MiseryBidAction extends BidAction {
     constructor(player: Player){
@@ -14,6 +15,10 @@ class MiseryBidAction extends BidAction {
 
     getTarget(){
         return 0;
+    }
+
+    getCalculator(){
+        return new MiseryCalculator();
     }
 }
 

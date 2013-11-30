@@ -5,6 +5,7 @@ import Player = require("src/player/Player");
 import Phase = require("src/game/Phase");
 import Mode = require("src/game/Mode");
 import Suit = require("src/card/Suit");
+import SoloCalculator = require("src/calculator/SoloCalculator");
 
 describe("Players are assigned a score after a solo game", function(){
 
@@ -18,6 +19,7 @@ describe("Players are assigned a score after a solo game", function(){
         Game.target = 13;
         Game.mode = Mode.SOLO;
         Game.defaultTrump = Suit.SPADES;
+        Game.calculator = new SoloCalculator();
     });
 
     it("And the active player gains 45 points for achieving the target when his choice of suit was different than the default trump", function(){
