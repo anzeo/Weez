@@ -9,90 +9,86 @@ import Bid = require("src/bid/Bid");
 import Table = require("src/area/Table");
 import DefaultCalculator = require("src/calculator/DefaultCalculator");
 
-function getPlayerNextOf(player: Player): Player{
-    return players[ (players.indexOf(player) + 1) % 4]
-}
+class Game {
+    activePlayers: Array<Player>;
+    currentPlayer: Player;
+    deck: Deck;
+    dealer: Player;
+    phase: Phase;
+    players: Array<Player>;
+    trump: Suit;
+    defaultTrump: Suit;
+    bidding: Bidding;
+    table: Table;
+    mode:Mode;
+    target: number;
+    scoredTicks: number;
+    calculator: DefaultCalculator;
 
-export var
-    activePlayers: Array<Player>,
-    currentPlayer: Player,
-    deck: Deck,
-    dealer: Player,
-    phase: Phase,
-    players: Array<Player>,
-    trump: Suit,
-    defaultTrump: Suit,
-    bidding: Bidding,
-    table: Table,
-    mode:Mode,
-    target: number,
-    scoredTicks: number,
-    calculator: DefaultCalculator,
+    constructor(deck: Deck, players: Array<Player>, bidding: Bidding, table:Table){
+        this.deck = deck;
+        this.phase = Phase.SETUP;
+        this.players = players;
+        this.dealer = players[0];
+        this.bidding = bidding;
+        this.table = table;
+        this.target = 0;
+        this.scoredTicks = 0;
+    }
 
-    deal = function(){
+    deal(){
         var cardsToDeal: Array<Card>,
-            start = (players.indexOf(dealer) + 1) % 4,
+            start = (this.players.indexOf(this.dealer) + 1) % 4,
             i = 0,
-            lastCard = deck.cards[0];
+            lastCard = this.deck.cards[0];
 
-        while(deck.cards.length){
-            cardsToDeal = deck.take(deck.cards.length > 20 ? 4 : 5);
-            players[ (start + i++ ) % 4 ].deal(cardsToDeal);
+        while(this.deck.cards.length){
+            cardsToDeal = this.deck.take(this.deck.cards.length > 20 ? 4 : 5);
+            this.players[ (start + i++ ) % 4 ].deal(cardsToDeal);
         }
 
-        currentPlayer = players[start];
-        phase = Phase.BID;
-        defaultTrump = lastCard.suit;
-    },
+        this.currentPlayer = this.players[start];
+        this.phase = Phase.BID;
+        this.defaultTrump = lastCard.suit;
+    }
 
-    play = function(){
-        mode = bidding.resolvedMode;
-        if(mode === Mode.PASS){
+    play(){
+        this.mode = this.bidding.resolvedMode;
+        if(this.mode === Mode.PASS){
             // TODO what to do in case mode is PASS?
             return;
         }
+        this.phase = Phase.PLAY;
 
-        trump = bidding.resolvedTrump;
-        table.setTrump(trump);
-        activePlayers = bidding.activePlayers;
-        phase = Phase.PLAY;
-        target = bidding.target;
-        currentPlayer = getPlayerNextOf(dealer);
-        calculator = bidding.calculator;
-    },
+        this.trump = this.bidding.resolvedTrump;
+        this.activePlayers = this.bidding.activePlayers;
+        this.target = this.bidding.target;
+        this.currentPlayer = this.getPlayerNextOf(this.dealer);
+        this.calculator = this.bidding.calculator;
+    }
 
-    advanceCurrentPlayer = function(){
-        currentPlayer = getPlayerNextOf(currentPlayer);
-    },
+    score(){
+        this.phase = Phase.SCORE;
+        this.calculator.score(this.players,this.activePlayers,this.target,this.scoredTicks,this.trump,this.defaultTrump);
+    }
 
-    isActivePlayer = function(player: Player): boolean {
-        return activePlayers.indexOf(player) !== -1;
-    },
+    getPlayerNextOf(player: Player): Player{
+        return this.players[ (this.players.indexOf(player) + 1) % 4]
+    }
 
-    setup = function(_deck: Deck, _players: Array<Player>){
-        deck = _deck;
-        phase = Phase.SETUP;
-        players = _players;
-        dealer = players[0];
-        bidding = new Bidding();
-        table = new Table();
-        mode = undefined;
-        target = 0;
-        trump = undefined;
-        scoredTicks = 0;
-    },
+    advanceCurrentPlayer(){
+        this.currentPlayer = this.getPlayerNextOf(this.currentPlayer);
+    }
 
-    score = function(){
-        phase = Phase.SCORE;
-        calculator.score(players,activePlayers,target,scoredTicks,trump,defaultTrump);
-    },
+    isActivePlayer(player: Player): boolean {
+        return this.activePlayers.indexOf(player) !== -1;
+    }
 
-    isEndOfGame = function() {
-
-        if(mode === Mode.MISERY){
+    isEndOfGame(): boolean {
+        if(this.mode === Mode.MISERY){
             var allActivePlayersBusted = false;
-            for(var i = 0; i < activePlayers.length; i++){
-                if(!activePlayers[i].hasScoredTricks){
+            for(var i = 0; i < this.activePlayers.length; i++){
+                if(!this.activePlayers[i].hasScoredTricks){
                     allActivePlayersBusted = false;
                     break;
                 } else {
@@ -106,17 +102,19 @@ export var
             }
         }
 
-        if(mode === Mode.SOLO){
-            return  (deck.cards.length / 4) !== scoredTicks;
+        if(this.mode === Mode.SOLO){
+            return  (this.deck.cards.length / 4) !== this.scoredTicks;
         }
 
+        return this.deck.cards.length === 52;
+    }
 
-        return deck.cards.length === 52;
-    },
-
-    clearTable = function(): void {
+    clearTable(): void {
         for(var i = 0; i < 4; i++){
-            deck.cards.push(table.entries[i].item);
+            this.deck.cards.push(this.table.entries[i].item);
         }
-        table.entries = [];
-    };
+        this.table.entries = [];
+    }
+}
+
+export = Game;

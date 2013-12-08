@@ -7,17 +7,17 @@ import DefaultCalculator = require("src/calculator/DefaultCalculator")
 
 class BidAction  {
 
-    constructor(public player: Player, public bid:Bid){ }
+    constructor(public game:Game,public player: Player, public bid:Bid){ }
 
     isValid():boolean{
-        if(Game.phase !== Phase.BID)
+        if(this.game.phase !== Phase.BID)
             return false;
 
-        if(Game.bidding.hasEntryFor(this.player))
+        if(this.game.bidding.hasEntryFor(this.player))
             return false;
 
         // check if current player is active
-        if(Game.currentPlayer !== this.player)
+        if(this.game.currentPlayer !== this.player)
             return false;
 
         // a pass is always valid (TODO in case of troel this might not be the case?
@@ -25,12 +25,12 @@ class BidAction  {
             return true;
 
         // do not allow bids that have a lower priority
-        if(this.bid.mode < Game.bidding.resolvedMode){
+        if(this.bid.mode < this.game.bidding.resolvedMode){
             return false;
         }
 
         // if the new mode is different
-        if(Game.bidding.resolvedMode !== this.bid.mode){
+        if(this.game.bidding.resolvedMode !== this.bid.mode){
             return true;
         }
 
@@ -46,34 +46,36 @@ class BidAction  {
         return false;
     }
 
-    execute(): void {
+    execute(): boolean {
         if(this.isValid()){
-            var isNewWinner = Game.bidding.add(this.player, this.bid);
+            var isNewWinner = this.game.bidding.add(this.player, this.bid);
             if(isNewWinner){
-                Game.bidding.setResolvedProperties(this.player, this.bid.mode, this.getTarget(), this.bid.suit, this.getCalculator());
+                this.game.bidding.setResolvedProperties(this.player, this.bid.mode, this.getTarget(), this.bid.suit, this.getCalculator());
             }
 
-            if(Game.bidding.entries.length < 4){
-                Game.advanceCurrentPlayer();
-                return;
+            if(this.game.bidding.entries.length < 4){
+                this.game.advanceCurrentPlayer();
+                return true;
             }
 
-            if(Game.bidding.needsConfirmation()){
-                Game.currentPlayer = Game.bidding.activePlayers[0];
-                Game.bidding.removeActivePlayerEntry();
+            if(this.game.bidding.needsConfirmation()){
+                this.game.currentPlayer = this.game.bidding.activePlayers[0];
+                this.game.bidding.removeActivePlayerEntry();
             } else {
-                Game.play();
+                this.game.play();
             }
+            return true
         }
+        return false;
     }
 
     moreActivePlayersAreAllowed(): boolean {
-        return Game.bidding.activePlayers.length < 2;
+        return this.game.bidding.activePlayers.length < 2;
     }
 
     getTarget(): number {
         // if there is already an active player, this means the new target should be 8.
-        return Game.bidding.activePlayers.length === 1 ? 8 : 5;
+        return this.game.bidding.activePlayers.length === 1 ? 8 : 5;
     }
 
     getCalculator(): DefaultCalculator {
@@ -81,7 +83,7 @@ class BidAction  {
     }
 
     trumpIsHigherOrDefault(): boolean {
-        return Game.bidding.resolvedTrump !== Game.defaultTrump && (this.bid.suit > Game.bidding.resolvedTrump || this.bid.suit === Game.defaultTrump)
+        return this.game.bidding.resolvedTrump !== this.game.defaultTrump && (this.bid.suit > this.game.bidding.resolvedTrump || this.bid.suit === this.game.defaultTrump)
     }
 }
 

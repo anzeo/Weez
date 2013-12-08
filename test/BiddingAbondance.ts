@@ -1,78 +1,53 @@
 /// <reference path="../def/jasmine.d.ts" />
-import ActionFactory = require("src/action/ActionFactory");
 import Suit = require("src/card/Suit");
-import Game = require("src/game/Game");
+import Weez = require("src/Weez");
 import Mode = require("src/game/Mode");
-import Deck = require("src/card/Deck");
 import Player = require("src/player/Player");
 
 describe("A valid abondance bid", function(){
 
+    var game;
     beforeEach(function(){
-        var deck = new Deck();
-        deck.shuffle();
-        Game.setup(deck, [new Player(), new Player(), new Player(), new Player()]);
-        Game.deal();
+        game = Weez.createGame([new Player(), new Player(), new Player(), new Player()]);
+        game.deal();
     });
 
     it("is valid if the current resolved mode is normal", function(){
-        var player2BidAction = ActionFactory.createNormalBidAction(Game.players[1]);
-        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.CLUBS);
-        var player4BidAction = ActionFactory.createPassBidAction(Game.players[3]);
-        var player1BidAction = ActionFactory.createPassBidAction(Game.players[0]);
-
-        player2BidAction.execute();
-        expect(player3BidAction.isValid()).toEqual(true);
-        player3BidAction.execute();
-        expect(player4BidAction.isValid()).toEqual(true);
-        player4BidAction.execute();
-        expect(player1BidAction.isValid()).toEqual(true);
+        Weez.bid(game.players[1]);
+        expect(Weez.bidAbondance(game.players[2],Suit.CLUBS)).toEqual(true);
+        expect(Weez.pass(game.players[3])).toEqual(true);
+        expect(Weez.pass(game.players[0])).toEqual(true);
     });
 
     it("can be resolved with only one active player", function(){
-        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.CLUBS);
-        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.CLUBS);
-
-        player2BidAction.execute();
-        expect(player3BidAction.isValid()).toEqual(false);
+        expect(Weez.bidAbondance(game.players[1],Suit.CLUBS)).toEqual(true);
+        expect(Weez.bidAbondance(game.players[2],Suit.CLUBS)).toEqual(false);
     });
 
     it("has precedence over another abondance bid in case it is made in the default trump", function(){
-        Game.defaultTrump = Suit.CLUBS;
+        game.defaultTrump = Suit.CLUBS;
 
-        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.HEARTS);
-        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.CLUBS);
-
-        player2BidAction.execute();
-        expect(player3BidAction.isValid()).toEqual(true);
+        Weez.bidAbondance(game.players[1],Suit.HEARTS);
+        expect(Weez.bidAbondance(game.players[2],Suit.CLUBS)).toEqual(true);
     });
 
     it("has precedence over another abondance bid in case it is made in a higher trump", function(){
-        Game.defaultTrump = Suit.SPADES;
+        game.defaultTrump = Suit.SPADES;
 
-        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.CLUBS);
-        var player3BidAction = ActionFactory.createAbondanceBidAction(Game.players[2], Suit.DIAMONDS);
-
-        player2BidAction.execute();
-        expect(player3BidAction.isValid()).toEqual(true);
+        Weez.bidAbondance(game.players[1],Suit.CLUBS);
+        expect(Weez.bidAbondance(game.players[2],Suit.DIAMONDS)).toEqual(true);
     });
 
     it("is resolved with the same trump of the winning bid", function(){
-        Game.defaultTrump = Suit.CLUBS;
+        game.defaultTrump = Suit.CLUBS;
 
-        var player2BidAction = ActionFactory.createAbondanceBidAction(Game.players[1], Suit.DIAMONDS);
-        var player3BidAction = ActionFactory.createPassBidAction(Game.players[2]);
-        var player4BidAction = ActionFactory.createPassBidAction(Game.players[3]);
-        var player1BidAction = ActionFactory.createPassBidAction(Game.players[0]);
+        Weez.bidAbondance(game.players[1], Suit.DIAMONDS);
+        Weez.pass(game.players[2]);
+        Weez.pass(game.players[3]);
+        Weez.pass(game.players[0]);
 
-        player2BidAction.execute();
-        player3BidAction.execute();
-        player4BidAction.execute();
-        player1BidAction.execute();
-
-        expect(Game.mode).toEqual(Mode.ABONDANCE);
-        expect(Game.target).toEqual(9);
-        expect(Game.trump).toEqual(Suit.DIAMONDS);
+        expect(game.mode).toEqual(Mode.ABONDANCE);
+        expect(game.target).toEqual(9);
+        expect(game.trump).toEqual(Suit.DIAMONDS);
     });
-
 });

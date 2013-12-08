@@ -3,10 +3,11 @@ import Player = require("src/player/Player");
 import Bid = require("src/bid/Bid");
 import Mode = require("src/game/Mode");
 import MiseryCalculator = require("src/calculator/MiseryCalculator");
+import Game = require("src/game/Game");
 
 class MiseryBidAction extends BidAction {
-    constructor(player: Player){
-        super(player, new Bid(Mode.MISERY));
+    constructor(game:Game,player: Player){
+        super(game,player, new Bid(Mode.MISERY));
     }
 
     moreActivePlayersAreAllowed(){

@@ -6,24 +6,25 @@ import Player = require("src/player/Player");
 
 describe("A new game", function(){
 
+    var game;
     beforeEach(function(){
-        Game.setup(new Deck(), [new Player(), new Player(), new Player(), new Player()]);
-    })
+        game = new Game(new Deck(), [new Player(), new Player(), new Player(), new Player()],undefined,undefined);
+    });
 
     it("has 4 players", function(){
-        expect(Game.players.length).toEqual(4);
-    })
+        expect(game.players.length).toEqual(4);
+    });
 
     it("has a deck of 52 unique cards", function(){
-        expect(Game.deck.cards.length).toEqual(52);
-    })
+        expect(game.deck.cards.length).toEqual(52);
+    });
 
     it("has a dealer", function(){
-        expect(Game.dealer).toBeDefined();
-        expect(Game.dealer).toEqual(Game.players[0]);
-    })
+        expect(game.dealer).toBeDefined();
+        expect(game.dealer).toEqual(game.players[0]);
+    });
 
     it("is in the setup phase", function(){
-        expect(Game.phase).toEqual(Phase.SETUP);
-    })
-})
+        expect(game.phase).toEqual(Phase.SETUP);
+    });
+});

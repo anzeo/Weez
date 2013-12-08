@@ -5,20 +5,20 @@ import Phase = require("src/game/Phase");
 
 class PlayAction {
 
-    constructor(public player:Player, public card: Card){}
+    constructor(public game:Game,public player:Player, public card: Card){}
 
     isValid():boolean {
-        if(Game.phase !== Phase.PLAY)
+        if(this.game.phase !== Phase.PLAY)
             return false;
-        if(Game.table.hasEntryFor(this.player))
+        if(this.game.table.hasEntryFor(this.player))
             return false;
-        if(Game.currentPlayer !== this.player )
+        if(this.game.currentPlayer !== this.player )
             return false;
         if(!this.player.owns(this.card))
             return false;
-        if(Game.table.isEmpty())
+        if(this.game.table.isEmpty())
             return true;
-        if(this.card.suit === Game.table.getSuitOfCard(0))
+        if(this.card.suit === this.game.table.getSuitOfCard(0))
             return true;
         if(!this.player.hasCardsOfSuit(this.card.suit))
             return true;
@@ -26,44 +26,46 @@ class PlayAction {
         return false;
     }
 
-    execute():void {
+    execute(): boolean {
         if(this.isValid()){
-            Game.table.add(this.player, this.card);
-            Game.advanceCurrentPlayer();
+            this.game.table.add(this.player, this.card);
+            this.game.advanceCurrentPlayer();
             this.player.play(this.card);
 
-            if(Game.table.entries.length === 4) {
+            if(this.game.table.entries.length === 4) {
                 // TODO score logic
                 var winningEntry;
                 for(var i = 0; i < 4; i++){
                     if(!winningEntry){
-                        winningEntry = Game.table.entries[i];
+                        winningEntry = this.game.table.entries[i];
                         continue;
                     }
-                    var currentEntry = Game.table.entries[i];
+                    var currentEntry = this.game.table.entries[i];
                     if(currentEntry.item.suit === winningEntry.item.suit){
                         if(currentEntry.item.value === 1 || (currentEntry.item.value > winningEntry.item.value && winningEntry.item.value !== 1 )){
                             winningEntry = currentEntry;
                         }
-                    } else if(currentEntry.item.suit > winningEntry.item.suit || currentEntry.item.suit === Game.table.trump){
+                    } else if(currentEntry.item.suit > winningEntry.item.suit || currentEntry.item.suit === this.game.trump){
                         winningEntry = currentEntry;
                     }
                 }
 
-                if(Game.isActivePlayer(winningEntry.player)){
-                    Game.scoredTicks += 1; // only score if player was active
+                if(this.game.isActivePlayer(winningEntry.player)){
+                    this.game.scoredTicks += 1; // only score if player was active
                 }
 
                 winningEntry.player.hasScoredTricks = true;
 
-                Game.clearTable();
+                this.game.clearTable();
 
                 // check for end of game
-                if(Game.isEndOfGame()) {
-                    Game.score();
+                if(this.game.isEndOfGame()) {
+                    this.game.score();
                 }
             }
+            return true;
         }
+        return false;
     }
 }
 

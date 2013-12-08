@@ -1,85 +1,92 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Game = require("src/game/Game");
-import Deck = require("src/card/Deck");
+import Weez = require("src/Weez");
 import Player = require("src/player/Player");
 import Phase = require("src/game/Phase");
 import Mode = require("src/game/Mode");
+import DefaultCalculator = require("src/calculator/DefaultCalculator");
 
 describe("Players are assigned a score", function(){
 
+    var game;
     beforeEach(function(){
-        var deck = new Deck();
-        deck.shuffle();
-        Game.setup(deck,[new Player(), new Player(),new Player(),new Player()]);
+        game = Weez.createGame([new Player(), new Player(),new Player(),new Player()]);
         // mock phase & mode
-        Game.mode = Mode.NORMAL;
-        Game.phase = Phase.PLAY;
+        game.mode = Mode.NORMAL;
+        game.phase = Phase.PLAY;
+
+        game.calculator = new DefaultCalculator();
     });
 
-    it("And the active player gains extra points for each scored trick above target", function(){
-        Game.activePlayers = [Game.players[0]];
-        Game.target = 5;
-        Game.scoredTicks = 7;
-        Game.score();
+    describe("When there's only one active player", function(){
 
-        expect(Game.players[0].score).toEqual(12);
-        expect(totalScoreEqualsZero()).toEqual(true);
+        beforeEach(function(){
+            game.activePlayers = [game.players[0]];
+            game.target = 5;
+        });
+
+        it("He gains extra points for each scored trick above target", function(){
+            game.scoredTicks = 7;
+            game.score();
+
+            expect(game.players[0].score).toEqual(12);
+            expect(totalScoreEqualsZero()).toEqual(true);
+        });
+
+        it("He gains 6 points for scoring exactly the target amount of tricks", function(){
+            game.scoredTicks = 5;
+            game.score();
+
+            expect(game.players[0].score).toEqual(6);
+            expect(totalScoreEqualsZero()).toEqual(true);
+        });
+
+        it("He loses extra points for each scored trick under target", function(){
+            game.scoredTicks = 3;
+            game.score();
+
+            expect(game.players[0].score).toEqual(-12);
+            expect(totalScoreEqualsZero()).toEqual(true);
+        });
     });
 
-    it("And the active player gains 6 points for scoring exactly the target amount of tricks", function(){
-        Game.activePlayers = [Game.players[0]];
-        Game.target = 5;
-        Game.scoredTicks = 5;
-        Game.score();
+    describe("When there are 2 active players", function(){
 
-        expect(Game.players[0].score).toEqual(6);
-        expect(totalScoreEqualsZero()).toEqual(true);
-    });
+        beforeEach(function(){
+            game.activePlayers = [game.players[0], game.players[1]];
+            game.target = 8;
+        });
 
-    it("And the active player loses extra points for each scored trick under target", function(){
-        Game.activePlayers = [Game.players[0]];
-        Game.target = 5;
-        Game.scoredTicks = 3;
-        Game.score();
+        it("They gain extra points for each scored trick above target", function(){
+            game.scoredTicks = game.target + 2;
+            game.score();
 
-        expect(Game.players[0].score).toEqual(-12);
-        expect(totalScoreEqualsZero()).toEqual(true);
-    });
+            expect(game.players[0].score).toEqual(4);
+            expect(totalScoreEqualsZero()).toEqual(true);
+        });
 
-    it("And the active players gain extra points for each scored trick above target", function(){
-        Game.activePlayers = [Game.players[0], Game.players[1]];
-        Game.target = 8;
-        Game.scoredTicks = Game.target + 2;
-        Game.score();
+        it("They gain 2 points each for scoring exactly the target amount of tricks", function(){
+            game.scoredTicks = game.target;
+            game.score();
 
-        expect(Game.players[0].score).toEqual(4);
-        expect(totalScoreEqualsZero()).toEqual(true);
-    });
+            expect(game.players[0].score).toEqual(2);
+            expect(game.players[1].score).toEqual(2);
+            expect(totalScoreEqualsZero()).toEqual(true);
+        });
 
-    it("And the active players gain 2 points for scoring exactly the target amount of tricks", function(){
-        Game.activePlayers = [Game.players[0], Game.players[1]];
-        Game.target = 8;
-        Game.scoredTicks = Game.target;
-        Game.score();
+        it("They each lose extra points for each scored trick under target", function(){
+            game.scoredTicks = game.target - 2;
+            game.score();
 
-        expect(Game.players[0].score).toEqual(2);
-        expect(totalScoreEqualsZero()).toEqual(true);
-    });
-
-    it("And the active players lose extra points for each scored trick under target", function(){
-        Game.activePlayers = [Game.players[0],Game.players[1]];
-        Game.target = 8;
-        Game.scoredTicks = Game.target - 2;
-        Game.score();
-
-        expect(Game.players[0].score).toEqual(-4);
-        expect(totalScoreEqualsZero()).toEqual(true);
+            expect(game.players[0].score).toEqual(-4);
+            expect(game.players[1].score).toEqual(-4);
+            expect(totalScoreEqualsZero()).toEqual(true);
+        });
     });
 
     function totalScoreEqualsZero(): boolean {
         var score = 0;
         for(var i = 0; i < 4; i++){
-            score += Game.players[i].score;
+            score += game.players[i].score;
         }
         return score === 0;
     }

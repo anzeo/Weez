@@ -1,103 +1,79 @@
 /// <reference path="../def/jasmine.d.ts" />
-import ActionFactory = require("src/action/ActionFactory");
 import Suit = require("src/card/Suit");
-import Game = require("src/game/Game");
+import Weez = require("src/Weez");
 import Mode = require("src/game/Mode");
-import Deck = require("src/card/Deck");
 import Player = require("src/player/Player");
 import Phase = require("src/game/Phase");
+import PassBidAction = require("src/action/PassBidAction");
 
 describe("A normal bid", function(){
-
+    var game;
     beforeEach(function(){
-        var deck = new Deck();
-        deck.shuffle();
-        Game.setup(deck, [new Player(), new Player(), new Player(), new Player()]);
-        Game.deal();
+        game = Weez.createGame([new Player(), new Player(), new Player(), new Player()]);
+        game.deal();
     });
 
     it("is not valid in case a previous bid was made for misery", function(){
-        var bidActionPlayer2 = ActionFactory.createMiseryBidAction(Game.players[1]),
-            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]);
+        Weez.bidMisery(game.players[1]);
+        var bidActionPlayer3IsValid = Weez.bid(game.players[2]);
 
-        bidActionPlayer2.execute();
-        expect(bidActionPlayer3.isValid()).toEqual(false);
+        expect(bidActionPlayer3IsValid).toEqual(false);
     });
 
     it("does not allow more than 2 active players", function(){
-        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
-            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
-            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
-            bidActionPlayer1 = ActionFactory.createNormalBidAction(Game.players[0]);
+        Weez.bid(game.players[1]);
+        Weez.bid(game.players[2]);
+        Weez.pass(game.players[3]);
 
-        bidActionPlayer2.execute();
-        bidActionPlayer3.execute();
-        bidActionPlayer4.execute();
-        expect(bidActionPlayer1.isValid()).toEqual(false);
+        var bidActionPlayer1IsValid = Weez.bid(game.players[0]);
+        expect(bidActionPlayer1IsValid).toEqual(false);
     });
 
     it("has to be confirmed in case there's only one active player", function(){
-        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
-            bidActionPlayer2Pass = ActionFactory.createPassBidAction(Game.players[1]),
-            bidActionPlayer3 = ActionFactory.createPassBidAction(Game.players[2]),
-            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
-            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
+        var bidActionPlayer2Pass = new PassBidAction(game,game.players[1]);
 
-        bidActionPlayer2.execute();
-        bidActionPlayer3.execute();
-        bidActionPlayer4.execute();
-        bidActionPlayer1.execute();
-        expect(Game.phase).toEqual(Phase.BID);
-        expect(Game.mode).toBeUndefined();
-        expect(bidActionPlayer2.isValid()).toEqual(true);
+        var initialBidPlayerIsValid = Weez.bid(game.players[1]);
+        Weez.pass(game.players[2]);
+        Weez.pass(game.players[3]);
+        Weez.pass(game.players[0]);
+
+        expect(game.phase).toEqual(Phase.BID);
+        expect(game.mode).toBeUndefined();
+        expect(initialBidPlayerIsValid).toEqual(true);
+        // confirm that a pass was valid as well TODO execute this!
         expect(bidActionPlayer2Pass.isValid()).toEqual(true);
-        bidActionPlayer2.execute();
-        expect(Game.phase).toEqual(Phase.PLAY);
-        expect(Game.mode).toEqual(Mode.NORMAL);
-        expect(Game.currentPlayer).toEqual(Game.players[1]);
-        expect(Game.trump).toEqual(Game.defaultTrump);
+        Weez.bid(game.players[1]);
+        expect(game.phase).toEqual(Phase.PLAY);
+        expect(game.mode).toEqual(Mode.NORMAL);
+        expect(game.currentPlayer).toEqual(game.players[1]);
+        expect(game.trump).toEqual(game.defaultTrump);
     });
 
     it("can be resolved with 2 active players at a target of 8", function(){
-        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
-            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
-            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
-            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
+        Weez.bid(game.players[1]);
+        Weez.bid(game.players[2]);
+        Weez.pass(game.players[3]);
+        Weez.pass(game.players[0]);
 
-        bidActionPlayer2.execute();
-        bidActionPlayer3.execute();
-        bidActionPlayer4.execute();
-        bidActionPlayer1.execute();
-
-        expect(Game.target).toEqual(8);
+        expect(game.target).toEqual(8);
     });
 
     it("can be resolved with 1 active players at a target of 5", function(){
-        var bidActionPlayer2 = ActionFactory.createPassBidAction(Game.players[1]),
-            bidActionPlayer3 = ActionFactory.createPassBidAction(Game.players[2]),
-            bidActionPlayer4 = ActionFactory.createNormalBidAction(Game.players[3]),
-            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
+        Weez.pass(game.players[1]);
+        Weez.pass(game.players[2]);
+        Weez.bid(game.players[3]);
+        Weez.pass(game.players[0]);
+        Weez.bid(game.players[3]); // confirm
 
-        bidActionPlayer2.execute();
-        bidActionPlayer3.execute();
-        bidActionPlayer4.execute();
-        bidActionPlayer1.execute();
-        bidActionPlayer4.execute();
-
-        expect(Game.target).toEqual(5);
+        expect(game.target).toEqual(5);
     });
 
     it("is always resolved with the default trump", function(){
-        var bidActionPlayer2 = ActionFactory.createNormalBidAction(Game.players[1]),
-            bidActionPlayer3 = ActionFactory.createNormalBidAction(Game.players[2]),
-            bidActionPlayer4 = ActionFactory.createPassBidAction(Game.players[3]),
-            bidActionPlayer1 = ActionFactory.createPassBidAction(Game.players[0]);
+        Weez.bid(game.players[1]);
+        Weez.bid(game.players[2]);
+        Weez.pass(game.players[3]);
+        Weez.pass(game.players[0]);
 
-        bidActionPlayer2.execute();
-        bidActionPlayer3.execute();
-        bidActionPlayer4.execute();
-        bidActionPlayer1.execute();
-
-        expect(Game.trump).toEqual(Game.defaultTrump);
+        expect(game.trump).toEqual(game.defaultTrump);
     });
 });

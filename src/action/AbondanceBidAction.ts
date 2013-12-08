@@ -8,12 +8,12 @@ import Game = require("src/game/Game");
 
 class AbondanceBidAction extends BidAction {
 
-    constructor(player:Player, suit:Suit){
-        super(player, new Bid(Mode.ABONDANCE, suit))
+    constructor(game:Game,player:Player, suit:Suit){
+        super(game,player, new Bid(Mode.ABONDANCE, suit))
     }
 
     moreActivePlayersAreAllowed(){
-        return Game.bidding.activePlayers.length < 1;
+        return this.game.bidding.activePlayers.length < 1;
     }
 
     getTarget(){
