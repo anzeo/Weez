@@ -29,40 +29,42 @@ class PlayAction {
     execute(): boolean {
         if(this.isValid()){
             this.game.table.add(this.player, this.card);
-            this.game.advanceCurrentPlayer();
             this.player.play(this.card);
 
-            if(this.game.table.entries.length === 4) {
-                // TODO score logic
-                var winningEntry;
-                for(var i = 0; i < 4; i++){
-                    if(!winningEntry){
-                        winningEntry = this.game.table.entries[i];
-                        continue;
-                    }
-                    var currentEntry = this.game.table.entries[i];
-                    if(currentEntry.item.suit === winningEntry.item.suit){
-                        if(currentEntry.item.value === 1 || (currentEntry.item.value > winningEntry.item.value && winningEntry.item.value !== 1 )){
-                            winningEntry = currentEntry;
-                        }
-                    } else if(currentEntry.item.suit > winningEntry.item.suit || currentEntry.item.suit === this.game.trump){
+            if(this.game.table.entries.length < 4) {
+                this.game.advanceCurrentPlayer();
+                return true;
+            }
+
+            var winningEntry;
+            for(var i = 0; i < 4; i++){
+                if(!winningEntry){
+                    winningEntry = this.game.table.entries[i];
+                    continue;
+                }
+                var currentEntry = this.game.table.entries[i];
+                if(currentEntry.item.suit === winningEntry.item.suit){
+                    if(currentEntry.item.value === 1 || (currentEntry.item.value > winningEntry.item.value && winningEntry.item.value !== 1 )){
                         winningEntry = currentEntry;
                     }
-                }
-
-                if(this.game.isActivePlayer(winningEntry.player)){
-                    this.game.scoredTicks += 1; // only score if player was active
-                }
-
-                winningEntry.player.hasScoredTricks = true;
-
-                this.game.clearTable();
-
-                // check for end of game
-                if(this.game.isEndOfGame()) {
-                    this.game.score();
+                } else if(currentEntry.item.suit > winningEntry.item.suit || currentEntry.item.suit === this.game.trump){
+                    winningEntry = currentEntry;
                 }
             }
+
+            if(this.game.isActivePlayer(winningEntry.player)){
+                this.game.scoredTicks += 1; // only score if player was active
+            }
+
+            winningEntry.player.hasScoredTricks = true;
+            this.game.currentPlayer = winningEntry.player;
+            this.game.clearTable();
+
+            // check for end of game
+            if(this.game.isEndOfGame()) {
+                this.game.score();
+            }
+
             return true;
         }
         return false;

@@ -42,13 +42,13 @@ describe("If a play action is executed", function(){
 
     describe("And as a result there are 4 cards on the table, the trick is resolved", function(){
         beforeEach(function(){
-            game.table.entries.push({player: game.players[1], item: new Card(13, Suit.HEARTS)});
-            game.table.entries.push({player: game.players[2], item: new Card(12, Suit.HEARTS)});
-            game.table.entries.push({player: game.players[3], item: new Card(11, Suit.HEARTS)});
+            game.table.entries.push({player: game.players[1], item: new Card(9, Suit.HEARTS)});
+            game.table.entries.push({player: game.players[2], item: new Card(10, Suit.HEARTS)});
+            game.table.entries.push({player: game.players[3], item: new Card(8, Suit.HEARTS)});
         });
 
         it("And the points are not increased in case the player scoring the tick was not an active player", function(){
-            var player = game.players[3],
+            var player = game.players[0],
                 playAction = ActionFactory.createPlayAction(game,player, new Card(1, game.trump));
 
             spyOn(playAction, "isValid").andReturn(true);
@@ -60,7 +60,7 @@ describe("If a play action is executed", function(){
         });
 
         it("And the points are increased in case the player scoring the tick was an active player", function(){
-            var player = game.players[3],
+            var player = game.players[0],
                 playAction = ActionFactory.createPlayAction(game,player, new Card(2, Suit.HEARTS));
 
             spyOn(playAction, "isValid").andReturn(true);
@@ -72,13 +72,23 @@ describe("If a play action is executed", function(){
         });
 
         it("And the table is cleared", function(){
-            var player = game.players[3],
+            var player = game.players[0],
                 playAction = ActionFactory.createPlayAction(game,player, new Card(2, Suit.HEARTS));
 
             spyOn(playAction, "isValid").andReturn(true);
             playAction.execute();
 
             expect(game.table.isEmpty()).toEqual(true);
+        });
+
+        it("And the player who wins the trick is the new current player", function(){
+            var player = game.players[0],
+                playAction = ActionFactory.createPlayAction(game,player, new Card(2, Suit.HEARTS));
+
+            spyOn(playAction, "isValid").andReturn(true);
+            playAction.execute();
+
+            expect(game.currentPlayer).toEqual(game.players[2]);
         });
     })
 });
