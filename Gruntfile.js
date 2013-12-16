@@ -2,12 +2,13 @@
 module.exports = function(grunt) {
 
     var SRC = "src",
-        TARGET = "target";
+        TARGET = "target",
+        DIST = "dist";
 
   grunt.initConfig({
       clean: [TARGET],
       requirejs: {
-          compile: {
+          development: {
               // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
               options: {
                   baseUrl: SRC,
@@ -15,17 +16,42 @@ module.exports = function(grunt) {
                   optimize: "none",
                   keepBuildDir: true,
                   skipDirOptimize: true,
+                  preserveLicenseComments: true,
+                  fileExclusionRegExp: /^\.|\.ts|\.map/
+              }
+          },
+          release: {
+              options: {
+                  name: SRC + "/Weez",
+                  out: DIST + "/Weez.js",
+                  optimize: "none",
+                  keepBuildDir: true,
+                  skipDirOptimize: true,
                   removeCombined: true,
                   preserveLicenseComments: true,
-                  fileExclusionRegExp: /^\.|\.handlebars|\.ts|\.map/
+                  fileExclusionRegExp: /^\.|\.ts|\.map/
               }
+
           }
       },
       typescript: {
-          base: {
+          development: {
               files: [
                  {src: [ SRC + '/**/*.ts'], dest: SRC},
                  {src: ['test/**/*.ts'], dest: 'test'}
+              ],
+              options: {
+                  module: 'amd',
+                  target: 'es5', //or es3
+                  base_path: SRC,
+                  sourcemap: false,
+                  fullSourceMapPath: false,
+                  declaration: false
+              }
+          },
+          release: {
+              files: [
+                  {src: [ SRC + '/**/*.ts'], dest: SRC}
               ],
               options: {
                   module: 'amd',
@@ -61,12 +87,17 @@ module.exports = function(grunt) {
     // register CLI tasks
     grunt.registerTask('build', [
         'clean',
-        'typescript',
-        'requirejs'
+        'typescript:development',
+        'requirejs:development'
     ]);
 
     grunt.registerTask('test', [
         'jasmine'
+    ]);
+
+    grunt.registerTask('release', [
+        'typescript:release',
+        'requirejs:release'
     ]);
 
     grunt.registerTask('default', [
