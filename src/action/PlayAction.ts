@@ -18,9 +18,11 @@ class PlayAction {
             return false;
         if(this.game.table.isEmpty())
             return true;
-        if(this.card.suit === this.game.table.getSuitOfCard(0))
+
+        var firstSuitPlayed = this.game.table.getSuitOfCard(0);
+        if(this.card.suit === firstSuitPlayed)
             return true;
-        if(!this.player.hasCardsOfSuit(this.card.suit))
+        if(!this.player.hasCardsOfSuit(firstSuitPlayed))
             return true;
 
         return false;

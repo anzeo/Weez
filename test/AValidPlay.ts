@@ -65,9 +65,8 @@ describe("A play action is valid", function(){
             cardPlayedBy2 = new Card(1,Suit.HEARTS),
             cardPlayedBy3 = new Card(1,Suit.CLUBS);
 
-        spyOn(player2, "owns").andReturn(true);
-        spyOn(player3, "owns").andReturn(true);
-        spyOn(player3, "hasCardsOfSuit").andReturn(false);
+        player2.hand = [cardPlayedBy2];
+        player3.hand = [cardPlayedBy3];
 
         Weez.play(player2,cardPlayedBy2);
         expect(Weez.play(player3,cardPlayedBy3)).toEqual(true);
