@@ -172,5 +172,4 @@ src/**/*.js
 test/**/*.js
 _SpecRunner.html
 target
-dist
 bower_components
