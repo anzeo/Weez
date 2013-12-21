@@ -34,6 +34,7 @@ class Game {
         this.table = table;
         this.target = 0;
         this.scoredTicks = 0;
+        this.trump = undefined;
     }
 
     deal(){
