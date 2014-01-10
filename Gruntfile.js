@@ -73,7 +73,8 @@ module.exports = function(grunt) {
                       baseUrl: "./",
                       urlArgs: "bust=" + Math.random()
                   }
-              }
+              },
+              keepRunner: true
           }
       }
   });
