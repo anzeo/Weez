@@ -25,7 +25,7 @@ describe("Players are assigned a score", function(){
         });
 
         it("He gains extra points for each scored trick above target", function(){
-            game.scoredTicks = 7;
+            game.scoredTricks = 7;
             game.score();
 
             expect(game.players[0].score).toEqual(12);
@@ -33,7 +33,7 @@ describe("Players are assigned a score", function(){
         });
 
         it("He gains 6 points for scoring exactly the target amount of tricks", function(){
-            game.scoredTicks = 5;
+            game.scoredTricks = 5;
             game.score();
 
             expect(game.players[0].score).toEqual(6);
@@ -41,7 +41,7 @@ describe("Players are assigned a score", function(){
         });
 
         it("He loses extra points for each scored trick under target", function(){
-            game.scoredTicks = 3;
+            game.scoredTricks = 3;
             game.score();
 
             expect(game.players[0].score).toEqual(-12);
@@ -57,7 +57,7 @@ describe("Players are assigned a score", function(){
         });
 
         it("They gain extra points for each scored trick above target", function(){
-            game.scoredTicks = game.target + 2;
+            game.scoredTricks = game.target + 2;
             game.score();
 
             expect(game.players[0].score).toEqual(4);
@@ -65,7 +65,7 @@ describe("Players are assigned a score", function(){
         });
 
         it("They gain 2 points each for scoring exactly the target amount of tricks", function(){
-            game.scoredTicks = game.target;
+            game.scoredTricks = game.target;
             game.score();
 
             expect(game.players[0].score).toEqual(2);
@@ -74,7 +74,7 @@ describe("Players are assigned a score", function(){
         });
 
         it("They each lose extra points for each scored trick under target", function(){
-            game.scoredTicks = game.target - 2;
+            game.scoredTricks = game.target - 2;
             game.score();
 
             expect(game.players[0].score).toEqual(-4);

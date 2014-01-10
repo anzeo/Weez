@@ -22,7 +22,7 @@ class Game {
     table: Table;
     mode:Mode;
     target: number;
-    scoredTicks: number;
+    scoredTricks: number;
     calculator: DefaultCalculator;
 
     constructor(deck: Deck, players: Array<Player>, bidding: Bidding, table:Table){
@@ -33,7 +33,7 @@ class Game {
         this.bidding = bidding;
         this.table = table;
         this.target = 0;
-        this.scoredTicks = 0;
+        this.scoredTricks = 0;
         this.trump = undefined;
     }
 
@@ -70,7 +70,7 @@ class Game {
 
     score(){
         this.phase = Phase.SCORE;
-        this.calculator.score(this.players,this.activePlayers,this.target,this.scoredTicks,this.trump,this.defaultTrump);
+        this.calculator.score(this.players,this.activePlayers,this.target,this.scoredTricks,this.trump,this.defaultTrump);
     }
 
     getPlayerNextOf(player: Player): Player{
@@ -104,7 +104,7 @@ class Game {
         }
 
         if(this.mode === Mode.SOLO){
-            return  (this.deck.cards.length / 4) !== this.scoredTicks;
+            return  (this.deck.cards.length / 4) !== this.scoredTricks;
         }
 
         return this.deck.cards.length === 52;

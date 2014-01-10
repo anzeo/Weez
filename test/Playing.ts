@@ -56,7 +56,7 @@ describe("If a play action is executed", function(){
             // As the dealer has played the ace of trump we expect him to have a point, but he passed this round so the score should not be increased
             // TODO need to find a better way to support resolving in other modes
             // Possibly by splitting up each case of game mode in a separate file and using the same mechanism to manipulate the table
-            expect(game.scoredTicks).toEqual(0);
+            expect(game.scoredTricks).toEqual(0);
         });
 
         it("And the points are increased in case the player scoring the tick was an active player", function(){
@@ -68,7 +68,7 @@ describe("If a play action is executed", function(){
             // First player scored the tick, so score should be increased
             // TODO need to find a better way to support resolving in other modes
             // Possibly by splitting up each case of game mode in a separate file and using the same mechanism to manipulate the table
-            expect(game.scoredTicks).toEqual(1);
+            expect(game.scoredTricks).toEqual(1);
         });
 
         it("And the table is cleared", function(){

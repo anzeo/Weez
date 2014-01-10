@@ -21,7 +21,7 @@ describe("Players are assigned a score after a solo game", function(){
     });
 
     it("And the active player gains 45 points for achieving the target when his choice of suit was different than the default trump", function(){
-        game.scoredTicks = 13;
+        game.scoredTricks = 13;
         game.trump = Suit.CLUBS;
         game.score();
 
@@ -30,7 +30,7 @@ describe("Players are assigned a score after a solo game", function(){
     });
 
     it("And the active player loses 45 points for not achieving the target when his choice of suit was different than the default trump", function(){
-        game.scoredTicks = 12;
+        game.scoredTricks = 12;
         game.trump = Suit.CLUBS;
         game.score();
 
@@ -39,7 +39,7 @@ describe("Players are assigned a score after a solo game", function(){
     });
 
     it("And the active player gains 90 points for achieving the target when his choice of suit was the default trump", function(){
-        game.scoredTicks = 13;
+        game.scoredTricks = 13;
         game.trump = game.defaultTrump;
         game.score();
 
@@ -48,7 +48,7 @@ describe("Players are assigned a score after a solo game", function(){
     });
 
     it("And the active player loses 90 points for not achieving the target when his choice of suit was the default trump", function(){
-        game.scoredTicks = 12;
+        game.scoredTricks = 12;
         game.trump = game.defaultTrump;
         game.score();
 

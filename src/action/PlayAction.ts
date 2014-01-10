@@ -55,7 +55,7 @@ class PlayAction {
             }
 
             if(this.game.isActivePlayer(winningEntry.player)){
-                this.game.scoredTicks += 1; // only score if player was active
+                this.game.scoredTricks += 1; // only score if player was active
             }
 
             winningEntry.player.hasScoredTricks = true;

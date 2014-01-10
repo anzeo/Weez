@@ -3,7 +3,7 @@ import Player = require("src/player/Player");
 import Suit = require("src/card/Suit");
 
 class MiseryCalculator extends DefaultCalculator {
-    score(players: Array<Player>, activePlayers: Array<Player>, target: number, scoredTicks: number, trump: Suit, defaultTrump: Suit){
+    score(players: Array<Player>, activePlayers: Array<Player>, target: number, scoredTricks: number, trump: Suit, defaultTrump: Suit){
         var activePlayersThatHaveLost: Array<Player> = filterArray(activePlayers, function(player: Player){
                 return player.hasScoredTricks;
             }),

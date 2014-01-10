@@ -25,7 +25,7 @@ describe("Players are assigned a score after a misery game", function(){
         });
 
         it("he gains 15 points for achieving the target", function(){
-            game.scoredTicks = 0;
+            game.scoredTricks = 0;
             game.score();
 
             playersScoreEquals([15,-5,-5,-5]);
@@ -59,7 +59,7 @@ describe("Players are assigned a score after a misery game", function(){
         });
 
         it("And only one wins, he gets 5 points from the second active player. The other players score does not change.", function(){
-            game.scoredTicks = 1;
+            game.scoredTricks = 1;
             game.players[0].hasScoredTricks = true;
             game.score();
 
