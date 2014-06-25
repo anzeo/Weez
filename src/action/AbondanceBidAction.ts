@@ -1,10 +1,9 @@
-import BidAction = require("src/action/BidAction");
-import Player = require("src/player/Player");
-import Suit = require("src/card/Suit");
-import Mode = require("src/game/Mode");
-import Bid = require("src/bid/Bid");
-
-import Game = require("src/game/Game");
+import BidAction = require("BidAction");
+import Player = require("../player/Player");
+import Suit = require("../card/Suit");
+import Mode = require("../game/Mode");
+import Bid = require("../bid/Bid");
+import Game = require("../game/Game");
 
 class AbondanceBidAction extends BidAction {
 

@@ -1,9 +1,9 @@
-import Bid = require("src/bid/Bid");
-import Player = require("src/player/Player");
-import Game = require("src/game/Game");
-import Phase = require("src/game/Phase");
-import Mode = require("src/game/Mode");
-import DefaultCalculator = require("src/calculator/DefaultCalculator")
+import Bid = require("../bid/Bid");
+import Player = require("../player/Player");
+import Game = require("../game/Game");
+import Phase = require("../game/Phase");
+import Mode = require("../game/Mode");
+import DefaultCalculator = require("../calculator/DefaultCalculator")
 
 class BidAction  {
 

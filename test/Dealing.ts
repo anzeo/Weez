@@ -1,9 +1,9 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Game = require("src/game/Game");
-import Phase = require("src/game/Phase");
-import Card = require("src/card/Card");
-import Player = require("src/player/Player");
-import Deck = require("src/card/Deck");
+import Game = require("../src/game/Game");
+import Phase = require("../src/game/Phase");
+import Card = require("../src/card/Card");
+import Player = require("../src/player/Player");
+import Deck = require("../src/card/Deck");
 
 describe("After a game has been dealt", function(){
 

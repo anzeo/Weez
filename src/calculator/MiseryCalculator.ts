@@ -1,6 +1,6 @@
-import DefaultCalculator = require("src/calculator/DefaultCalculator");
-import Player = require("src/player/Player");
-import Suit = require("src/card/Suit");
+import DefaultCalculator = require("DefaultCalculator");
+import Player = require("../player/Player");
+import Suit = require("../card/Suit");
 
 class MiseryCalculator extends DefaultCalculator {
     score(players: Array<Player>, activePlayers: Array<Player>, target: number, scoredTricks: number, trump: Suit, defaultTrump: Suit){

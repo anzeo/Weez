@@ -1,10 +1,10 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Weez = require("src/Weez");
-import Player = require("src/player/Player");
-import Phase = require("src/game/Phase");
-import Mode = require("src/game/Mode");
-import Suit = require("src/card/Suit");
-import SoloCalculator = require("src/calculator/SoloCalculator");
+import Weez = require("../src/Weez");
+import Player = require("../src/player/Player");
+import Phase = require("../src/game/Phase");
+import Mode = require("../src/game/Mode");
+import Suit = require("../src/card/Suit");
+import SoloCalculator = require("../src/calculator/SoloCalculator");
 
 describe("Players are assigned a score after a solo game", function(){
 

@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
       clean: [TARGET],
-      requirejs: {
+      /*requirejs: {
           development: {
               // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
               options: {
@@ -33,72 +33,49 @@ module.exports = function(grunt) {
               }
 
           }
-      },
+      },*/
       typescript: {
           development: {
               files: [
-                 {src: [ SRC + '/**/*.ts'], dest: SRC},
-                 {src: ['test/**/*.ts'], dest: 'test'}
+                 {src: [ SRC + '/**/*.ts'], dest: '/'},
+                 {src: ['test/**/*.ts'], dest: '/'}
               ],
               options: {
-                  module: 'amd',
-                  target: 'es5', //or es3
-                  base_path: SRC,
-                  sourcemap: false,
-                  fullSourceMapPath: false,
-                  declaration: false
-              }
-          },
-          release: {
-              files: [
-                  {src: [ SRC + '/**/*.ts'], dest: SRC}
-              ],
-              options: {
-                  module: 'amd',
-                  target: 'es5', //or es3
-                  base_path: SRC,
+                  module: 'commonjs',
+                  target: 'es5',
                   sourcemap: false,
                   fullSourceMapPath: false,
                   declaration: false
               }
           }
       },
-      jasmine: {
-          src: 'src/**/*.js',
+      jasmine_node: {
           options: {
-              specs: 'test/**/*.js',
-              template: require('grunt-template-jasmine-requirejs'),
-              templateOptions: {
-                  requireConfig: {
-                      baseUrl: "./",
-                      urlArgs: "bust=" + Math.random()
-                  }
-              },
-              keepRunner: true
-          }
+              forceExit: true,
+              match: '.',
+              matchall: true,
+              extensions: 'js',
+              specNameMatcher: ''
+
+          },
+          all: ['test/']
       }
   });
 
     // load in grunt tasks
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-typescript');
+    grunt.loadNpmTasks('grunt-jasmine-node');
 
     // register CLI tasks
     grunt.registerTask('build', [
         'clean',
-        'typescript:development',
-        'requirejs:development'
+        'typescript'
     ]);
 
     grunt.registerTask('test', [
-        'jasmine'
-    ]);
-
-    grunt.registerTask('release', [
-        'typescript:release',
-        'requirejs:release'
+        'jasmine_node'
     ]);
 
     grunt.registerTask('default', [

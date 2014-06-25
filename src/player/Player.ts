@@ -1,5 +1,5 @@
-import Card = require("src/card/Card");
-import Suit = require("src/card/Suit");
+import Card = require("../card/Card");
+import Suit = require("../card/Suit");
 
 class Player {
     hand: Array<Card>;

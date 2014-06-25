@@ -1,6 +1,6 @@
-import Area = require("src/area/Area");
-import Card = require("src/card/Card");
-import Suit = require("src/card/Suit");
+import Area = require("Area");
+import Card = require("../card/Card");
+import Suit = require("../card/Suit");
 
 class Table extends Area<Card> {
     getSuitOfCard(i: number): Suit{

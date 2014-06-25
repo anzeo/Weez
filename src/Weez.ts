@@ -1,14 +1,14 @@
 /**
  * Main file for the Weez game engine
  */
-import Game = require("src/game/Game");
-import Player = require("src/player/Player");
-import Deck = require("src/card/Deck");
-import Bidding = require("src/area/Bidding");
-import Table = require("src/area/Table");
-import ActionFactory = require("src/action/ActionFactory");
-import Suit = require("src/card/Suit");
-import Card = require("src/card/Card");
+import Game = require("game/Game");
+import Player = require("player/Player");
+import Deck = require("card/Deck");
+import Bidding = require("area/Bidding");
+import Table = require("area/Table");
+import ActionFactory = require("action/ActionFactory");
+import Suit = require("card/Suit");
+import Card = require("card/Card");
 
 var instance:Game;
 

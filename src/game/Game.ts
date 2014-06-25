@@ -1,13 +1,13 @@
-import Card = require("src/card/Card");
-import Suit = require("src/card/Suit");
-import Deck = require("src/card/Deck");
-import Phase = require("src/game/Phase");
-import Player = require("src/player/Player");
-import Mode = require("src/game/Mode");
-import Bidding = require("src/area/Bidding");
-import Bid = require("src/bid/Bid");
-import Table = require("src/area/Table");
-import DefaultCalculator = require("src/calculator/DefaultCalculator");
+import Card = require("../card/Card");
+import Suit = require("../card/Suit");
+import Deck = require("../card/Deck");
+import Phase = require("Phase");
+import Player = require("../player/Player");
+import Mode = require("Mode");
+import Bidding = require("../area/Bidding");
+import Bid = require("../bid/Bid");
+import Table = require("../area/Table");
+import DefaultCalculator = require("../calculator/DefaultCalculator");
 
 class Game {
     activePlayers: Array<Player>;

@@ -1,7 +1,7 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Player = require("src/player/Player");
-import Card = require("src/card/Card");
-import Suit = require("src/card/Suit");
+import Player = require("../src/player/Player");
+import Card = require("../src/card/Card");
+import Suit = require("../src/card/Suit");
 
 describe("A player", function(){
 

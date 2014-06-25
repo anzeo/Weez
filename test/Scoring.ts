@@ -1,9 +1,9 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Weez = require("src/Weez");
-import Player = require("src/player/Player");
-import Phase = require("src/game/Phase");
-import Mode = require("src/game/Mode");
-import DefaultCalculator = require("src/calculator/DefaultCalculator");
+import Weez = require("../src/Weez");
+import Player = require("../src/player/Player");
+import Phase = require("../src/game/Phase");
+import Mode = require("../src/game/Mode");
+import DefaultCalculator = require("../src/calculator/DefaultCalculator");
 
 describe("Players are assigned a score", function(){
 

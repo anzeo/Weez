@@ -1,5 +1,5 @@
 ///<reference path="../../def/weez.d.ts"/>
-import Player = require("src/player/Player");
+import Player = require("../player/Player");
 
 class Area<T> {
 

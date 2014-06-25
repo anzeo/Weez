@@ -1,13 +1,13 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Weez = require("src/Weez");
-import Deck = require("src/card/Deck");
-import Player = require("src/player/Player");
-import Phase = require("src/game/Phase");
-import ActionFactory = require("src/action/ActionFactory");
-import Mode = require("src/game/Mode");
-import Card = require("src/card/Card");
-import Suit = require("src/card/Suit");
-import DefaultCalculator = require("src/calculator/DefaultCalculator");
+import Weez = require("../src/Weez");
+import Deck = require("../src/card/Deck");
+import Player = require("../src/player/Player");
+import Phase = require("../src/game/Phase");
+import ActionFactory = require("../src/action/ActionFactory");
+import Mode = require("../src/game/Mode");
+import Card = require("../src/card/Card");
+import Suit = require("../src/card/Suit");
+import DefaultCalculator = require("../src/calculator/DefaultCalculator");
 
 describe("A game is scored", function(){
 

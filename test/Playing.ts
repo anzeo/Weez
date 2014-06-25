@@ -1,10 +1,10 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Weez = require("src/Weez");
-import Player = require("src/player/Player");
-import ActionFactory = require("src/action/ActionFactory");
-import Mode = require("src/game/Mode");
-import Card = require("src/card/Card");
-import Suit = require("src/card/Suit");
+import Weez = require("../src/Weez");
+import Player = require("../src/player/Player");
+import ActionFactory = require("../src/action/ActionFactory");
+import Mode = require("../src/game/Mode");
+import Card = require("../src/card/Card");
+import Suit = require("../src/card/Suit");
 
 describe("If a play action is executed", function(){
 

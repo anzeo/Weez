@@ -1,4 +1,4 @@
-import Suit = require("src/card/Suit");
+import Suit = require("Suit");
 
 class Card {
     constructor(public value: number,public suit: Suit){}

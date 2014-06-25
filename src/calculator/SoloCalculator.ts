@@ -1,5 +1,5 @@
-import Suit = require("src/card/Suit");
-import DefaultCalculator = require("src/calculator/DefaultCalculator");
+import Suit = require("../card/Suit");
+import DefaultCalculator = require("DefaultCalculator");
 
 class SoloCalculator extends DefaultCalculator {
     getIndividualScore(scoredTricks: number, target: number, trump: Suit, defaultTrump: Suit): number {

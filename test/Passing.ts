@@ -1,7 +1,7 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Weez = require("src/Weez");
-import Mode = require("src/game/Mode");
-import Player = require("src/player/Player");
+import Weez = require("../src/Weez");
+import Mode = require("../src/game/Mode");
+import Player = require("../src/player/Player");
 
 describe("A game can be passed", function(){
 

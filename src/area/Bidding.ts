@@ -1,9 +1,9 @@
-import Area = require("src/area/Area");
-import Bid = require("src/bid/Bid");
-import Suit = require("src/card/Suit");
-import Mode = require("src/game/Mode");
-import Player = require("src/player/Player");
-import DefaultCalculator = require("src/calculator/DefaultCalculator")
+import Area = require("Area");
+import Bid = require("../bid/Bid");
+import Suit = require("../card/Suit");
+import Mode = require("../game/Mode");
+import Player = require("../player/Player");
+import DefaultCalculator = require("../calculator/DefaultCalculator")
 
 class Bidding extends Area<Bid> {
     activePlayers: Array<Player>;

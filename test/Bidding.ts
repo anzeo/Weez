@@ -1,10 +1,10 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Suit = require("src/card/Suit");
-import Weez = require("src/Weez");
-import Mode = require("src/game/Mode");
-import Player = require("src/player/Player");
-import Phase = require("src/game/Phase");
-import PassBidAction = require("src/action/PassBidAction");
+import Suit = require("../src/card/Suit");
+import Weez = require("../src/Weez");
+import Mode = require("../src/game/Mode");
+import Player = require("../src/player/Player");
+import Phase = require("../src/game/Phase");
+import PassBidAction = require("../src/action/PassBidAction");
 
 describe("A normal bid", function(){
     var game;

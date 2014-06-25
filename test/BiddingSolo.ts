@@ -1,10 +1,10 @@
 /// <reference path="../def/jasmine.d.ts" />
-import ActionFactory = require("src/action/ActionFactory");
-import Suit = require("src/card/Suit");
-import Weez = require("src/Weez");
-import Mode = require("src/game/Mode");
-import Deck = require("src/card/Deck");
-import Player = require("src/player/Player");
+import ActionFactory = require("../src/action/ActionFactory");
+import Suit = require("../src/card/Suit");
+import Weez = require("../src/Weez");
+import Mode = require("../src/game/Mode");
+import Deck = require("../src/card/Deck");
+import Player = require("../src/player/Player");
 
 describe("A valid solo bid", function(){
 

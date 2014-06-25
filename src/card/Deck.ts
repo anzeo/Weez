@@ -1,5 +1,5 @@
-import Card = require("src/card/Card");
-import Suit = require("src/card/Suit");
+import Card = require("Card");
+import Suit = require("Suit");
 
 class Deck {
     cards: Array<Card>;

@@ -1,5 +1,5 @@
-import Suit = require("src/card/Suit");
-import Mode = require("src/game/Mode");
+import Suit = require("../card/Suit");
+import Mode = require("../game/Mode");
 
 class Bid {
     constructor(public mode: Mode, public suit?: Suit){

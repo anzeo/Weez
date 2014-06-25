@@ -1,8 +1,8 @@
 /// <reference path="../def/jasmine.d.ts" />
-import Game = require("src/game/Game");
-import Phase = require("src/game/Phase");
-import Deck = require("src/card/Deck");
-import Player = require("src/player/Player");
+import Game = require("../src/game/Game");
+import Phase = require("../src/game/Phase");
+import Deck = require("../src/card/Deck");
+import Player = require("../src/player/Player");
 
 describe("A new game", function(){
 

@@ -1,7 +1,7 @@
-import Player = require("src/player/Player");
-import Card = require("src/card/Card");
-import Game = require("src/game/Game");
-import Phase = require("src/game/Phase");
+import Player = require("../player/Player");
+import Card = require("../card/Card");
+import Game = require("../game/Game");
+import Phase = require("../game/Phase");
 
 class PlayAction {
 

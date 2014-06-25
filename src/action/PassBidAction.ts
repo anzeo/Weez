@@ -1,8 +1,8 @@
-import BidAction = require("src/action/BidAction");
-import Player = require("src/player/Player");
-import Bid = require("src/bid/Bid");
-import Mode = require("src/game/Mode");
-import Game = require("src/game/Game");
+import BidAction = require("BidAction");
+import Player = require("../player/Player");
+import Bid = require("../bid/Bid");
+import Mode = require("../game/Mode");
+import Game = require("../game/Game");
 
 class PassBidAction extends BidAction {
     constructor(game:Game,player: Player){
