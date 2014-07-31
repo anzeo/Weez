@@ -1,15 +1,16 @@
-/// <reference path="../def/jasmine.d.ts" />
-import Weez = require("../src/Weez");
-import Player = require("../src/player/Player");
-import Phase = require("../src/game/Phase");
-import Mode = require("../src/game/Mode");
-import DefaultCalculator = require("../src/calculator/DefaultCalculator");
+/// <reference path="../../def/jasmine.d.ts" />
+import Weez = require("../../src/Weez");
+import Player = require("../../src/player/Player");
+import Phase = require("../../src/game/Phase");
+import Mode = require("../../src/game/Mode");
+import DefaultCalculator = require("../../src/calculator/DefaultCalculator");
 
 describe("Players are assigned a score", function(){
 
     var game;
     beforeEach(function(){
-        game = Weez.createGame([new Player(), new Player(),new Player(),new Player()]);
+        game = Weez.createGame();
+        game.players = [new Player(), new Player(), new Player(), new Player()];
         // mock phase & mode
         game.mode = Mode.NORMAL;
         game.phase = Phase.PLAY;

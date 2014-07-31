@@ -12,10 +12,10 @@ import Card = require("card/Card");
 
 var instance:Game;
 
-export var createGame = function(players: Array<Player>): Game{
+export var createGame = function(): Game{
     var deck = new Deck();
     deck.shuffle();
-    instance = new Game(deck,players,new Bidding(),new Table());
+    instance = new Game(deck,new Bidding(),new Table());
     return instance;
     },
 

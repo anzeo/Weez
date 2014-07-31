@@ -1,9 +1,9 @@
-/// <reference path="../def/jasmine.d.ts" />
-import Game = require("../src/game/Game");
-import Phase = require("../src/game/Phase");
-import Card = require("../src/card/Card");
-import Player = require("../src/player/Player");
-import Deck = require("../src/card/Deck");
+/// <reference path="../../def/jasmine.d.ts" />
+import Game = require("../../src/game/Game");
+import Phase = require("../../src/game/Phase");
+import Card = require("../../src/card/Card");
+import Player = require("../../src/player/Player");
+import Deck = require("../../src/card/Deck");
 
 describe("After a game has been dealt", function(){
 
@@ -11,10 +11,11 @@ describe("After a game has been dealt", function(){
     beforeEach(function(){
         var deck = new Deck();
         deck.shuffle();
-        game = new Game(deck, [new Player(), new Player(), new Player(), new Player()], undefined, undefined);
+        game = new Game(deck, undefined, undefined);
+        game.players = [new Player(), new Player(), new Player(), new Player()];
         game.deal();
     });
-
+    
     it("each player holds 13 cards", function(){
         for(var i = 0; i < 4; i++){
             expect(game.players[i].hand.length).toEqual(13);
@@ -30,7 +31,8 @@ describe("After a game has been dealt", function(){
     });
 
     it("the cards have been dealt 4-4-5", function(){
-        game = new Game(new Deck(), [new Player(), new Player(), new Player(), new Player()], undefined, undefined);
+        game = new Game(new Deck(), undefined, undefined);
+        game.players = [new Player(), new Player(), new Player(), new Player()];
         var player1ExpectedHand = getCards([39,38,37,36,23,22,21,20,4,3,2,1,0]), // dealers
             player2ExpectedHand = getCards([51,50,49,48,35,34,33,32,19,18,17,16,15]),
             player3ExpectedHand = getCards([47,46,45,44,31,30,29,28,14,13,12,11,10]),

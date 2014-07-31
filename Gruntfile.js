@@ -42,7 +42,6 @@ module.exports = function(grunt) {
 
     // register CLI tasks
     grunt.registerTask('build', [
-        'clean',
         'typescript'
     ]);
 

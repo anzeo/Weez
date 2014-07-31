@@ -25,19 +25,29 @@ class Game {
     scoredTricks: number;
     calculator: DefaultCalculator;
 
-    constructor(deck: Deck, players: Array<Player>, bidding: Bidding, table:Table){
+    constructor(deck: Deck, bidding: Bidding, table:Table){
         this.deck = deck;
         this.phase = Phase.SETUP;
-        this.players = players;
-        this.dealer = players[0];
         this.bidding = bidding;
         this.table = table;
         this.target = 0;
         this.scoredTricks = 0;
         this.trump = undefined;
+        this.players = [];
+    }
+    
+    addPlayer(player:Player){
+        if(this.players.length < 4){
+            this.players.push(player);
+        }
     }
 
     deal(){
+        if(this.players.length !== 4){
+            return;
+        }
+        
+        this.dealer = this.players[0];
         var cardsToDeal: Array<Card>,
             start = (this.players.indexOf(this.dealer) + 1) % 4,
             i = 0,

@@ -1,16 +1,17 @@
-/// <reference path="../def/jasmine.d.ts" />
-import Weez = require("../src/Weez");
-import Player = require("../src/player/Player");
-import ActionFactory = require("../src/action/ActionFactory");
-import Mode = require("../src/game/Mode");
-import Card = require("../src/card/Card");
-import Suit = require("../src/card/Suit");
+/// <reference path="../../def/jasmine.d.ts" />
+import Weez = require("../../src/Weez");
+import Player = require("../../src/player/Player");
+import ActionFactory = require("../../src/action/ActionFactory");
+import Mode = require("../../src/game/Mode");
+import Card = require("../../src/card/Card");
+import Suit = require("../../src/card/Suit");
 
 describe("If a play action is executed", function(){
 
     var game;
     beforeEach(function(){
-        game = Weez.createGame([new Player(), new Player(), new Player(), new Player()]);
+        game = Weez.createGame();
+        game.players = [new Player(), new Player(), new Player(), new Player()];
         game.deal();
 
         Weez.bid(game.players[1]);

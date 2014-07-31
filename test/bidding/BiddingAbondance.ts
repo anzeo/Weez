@@ -1,14 +1,15 @@
-/// <reference path="../def/jasmine.d.ts" />
-import Suit = require("../src/card/Suit");
-import Weez = require("../src/Weez");
-import Mode = require("../src/game/Mode");
-import Player = require("../src/player/Player");
+/// <reference path="../../def/jasmine.d.ts" />
+import Suit = require("../../src/card/Suit");
+import Weez = require("../../src/Weez");
+import Mode = require("../../src/game/Mode");
+import Player = require("../../src/player/Player");
 
 describe("A valid abondance bid", function(){
 
     var game;
     beforeEach(function(){
-        game = Weez.createGame([new Player(), new Player(), new Player(), new Player()]);
+        game = Weez.createGame();
+        game.players = [new Player(), new Player(), new Player(), new Player()];
         game.deal();
     });
 
