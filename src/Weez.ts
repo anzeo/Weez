@@ -2,7 +2,7 @@
  * Main file for the Weez game engine
  */
 import Game = require("game/Game");
-import Player = require("player/Player");
+export import Player = require("player/Player");
 import Deck = require("card/Deck");
 import Bidding = require("area/Bidding");
 import Table = require("area/Table");
@@ -18,7 +18,7 @@ export var createGame = function(): Game{
     instance = new Game(deck,new Bidding(),new Table());
     return instance;
     },
-
+    
     bidAbondance = function(player:Player,suit:Suit) : boolean{
         return ActionFactory.createAbondanceBidAction(instance,player,suit).execute();
     },

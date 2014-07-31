@@ -2,16 +2,17 @@
 module.exports = function(grunt) {
 
     var SRC = "src",
-        TARGET = "target",
-        DIST = "dist";
+        TST = "test";
 
   grunt.initConfig({
-      clean: [TARGET],
+      clean: {
+          development: SRC + '/**/*.js',
+          test: TST + '/**/*.js', 
+      },
       typescript: {
           development: {
               files: [
-                 {src: [ SRC + '/**/*.ts'], dest: '/'},
-                 {src: ['test/**/*.ts'], dest: '/'}
+                 {src: [ SRC + '/**/*.ts'], dest: '/'}
               ],
               options: {
                   module: 'commonjs',
@@ -20,6 +21,18 @@ module.exports = function(grunt) {
                   fullSourceMapPath: false,
                   declaration: false
               }
+          },
+          test: {
+            files: [
+                 {src: [ TST + '/**/*.ts'], dest: '/'}
+              ],
+              options: {
+                  module: 'commonjs',
+                  target: 'es5',
+                  sourcemap: false,
+                  fullSourceMapPath: false,
+                  declaration: false
+              }    
           }
       },
       jasmine_node: {
@@ -31,7 +44,7 @@ module.exports = function(grunt) {
               specNameMatcher: ''
 
           },
-          all: ['test/']
+          all: [TST + '/']
       }
   });
 
@@ -42,10 +55,13 @@ module.exports = function(grunt) {
 
     // register CLI tasks
     grunt.registerTask('build', [
-        'typescript'
+        'clean:development',
+        'typescript:development'
     ]);
 
     grunt.registerTask('test', [
+        'clean:test',
+        'typescript:test',
         'jasmine_node'
     ]);
 
