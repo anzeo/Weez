@@ -1,52 +1,51 @@
-'use strict';
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
+    'use strict';
+    
     var SRC = "src",
         TST = "test";
 
-  grunt.initConfig({
-      clean: {
-          development: SRC + '/**/*.js',
-          test: TST + '/**/*.js', 
-      },
-      typescript: {
-          development: {
-              files: [
-                 {src: [ SRC + '/**/*.ts'], dest: '/'}
-              ],
-              options: {
-                  module: 'commonjs',
-                  target: 'es5',
-                  sourcemap: false,
-                  fullSourceMapPath: false,
-                  declaration: false
-              }
-          },
-          test: {
-            files: [
-                 {src: [ TST + '/**/*.ts'], dest: '/'}
-              ],
-              options: {
-                  module: 'commonjs',
-                  target: 'es5',
-                  sourcemap: false,
-                  fullSourceMapPath: false,
-                  declaration: false
-              }    
-          }
-      },
-      jasmine_node: {
-          options: {
-              forceExit: true,
-              match: '.',
-              matchall: true,
-              extensions: 'js',
-              specNameMatcher: ''
-
-          },
-          all: [TST + '/']
-      }
-  });
+    grunt.initConfig({
+        clean: {
+            development: SRC + '/**/*.js',
+            test: TST + '/**/*.js'
+        },
+        typescript: {
+            development: {
+                files: [
+                    {src: [ SRC + '/**/*.ts'], dest: '/'}
+                ],
+                options: {
+                    module: 'commonjs',
+                    target: 'es5',
+                    sourcemap: false,
+                    fullSourceMapPath: false,
+                    declaration: false
+                }
+            },
+            test: {
+                files: [
+                    {src: [ TST + '/**/*.ts'], dest: '/'}
+                ],
+                options: {
+                    module: 'commonjs',
+                    target: 'es5',
+                    sourcemap: false,
+                    fullSourceMapPath: false,
+                    declaration: false
+                }
+            }
+        },
+        jasmine_node: {
+            options: {
+                forceExit: true,
+                match: '.',
+                matchall: true,
+                extensions: 'js',
+                specNameMatcher: ''
+            },
+            all: [TST + '/']
+        }
+    });
 
     // load in grunt tasks
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -69,4 +68,4 @@ module.exports = function(grunt) {
         'build',
         'test'
     ]);
-}
+};
