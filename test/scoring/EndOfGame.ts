@@ -13,7 +13,7 @@ describe("A game is scored", function(){
 
     var game;
     beforeEach(function(){
-        game = Weez.createGame();
+        game = Weez.getGame(Weez.createGame());
         game.players = [new Player(), new Player(), new Player(), new Player()];
         game.calculator = new DefaultCalculator();
     });

@@ -38,6 +38,14 @@ export var createGame = function(): string{
         return id;
     },
     
+    getGame = function(gameId:string): Game{
+        return games[gameId];    
+    },
+    
+    getPlayer = function(playerId:string): Player{
+        return players[playerId]    
+    },
+    
     join = function(gameId:string, playerId:string){
         games[gameId].addPlayer(players[playerId]);
     },

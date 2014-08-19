@@ -10,20 +10,20 @@ describe("If a play action is executed", function(){
 
     var game;
     beforeEach(function(){
-        game = Weez.createGame();
+        game = Weez.getGame(Weez.createGame());
         game.players = [new Player(), new Player(), new Player(), new Player()];
         game.deal();
 
-        Weez.bid(game.players[1]);
-        Weez.bid(game.players[2]);
-        Weez.pass(game.players[3]);
-        Weez.pass(game.players[0]);
+        ActionFactory.createNormalBidAction(game, game.players[1]).execute();
+        ActionFactory.createNormalBidAction(game, game.players[2]).execute();
+        ActionFactory.createPassBidAction(game, game.players[3]).execute();
+        ActionFactory.createPassBidAction(game, game.players[0]).execute();
     });
 
     it("The played card is added to the table", function(){
         var player = game.players[1],
             card = player.hand[0],
-            playAction = ActionFactory.createPlayAction(game,player, card);
+            playAction = ActionFactory.createPlayAction(game, player, card);
 
         expect(playAction.isValid()).toBe(true);
         playAction.execute();

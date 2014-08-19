@@ -10,27 +10,27 @@ describe("A valid solo bid", function(){
 
     var game;
     beforeEach(function(){
-        game = Weez.createGame();
+        game = Weez.getGame(Weez.createGame());
         game.players = [new Player(), new Player(), new Player(), new Player()];
         game.deal();
     });
 
     it("can be made any time", function(){
-        Weez.bid(game.players[1]);
-        expect(Weez.bidMisery(game.players[2])).toEqual(true);
-        expect(Weez.bidSolo(game.players[3])).toEqual(true);
+        ActionFactory.createNormalBidAction(game, game.players[1]).execute();
+        ActionFactory.createMiseryBidAction(game, game.players[2]).execute();
+        expect(ActionFactory.createSoloBidAction(game, game.players[3]).execute()).toEqual(true);
     });
 
     it("can be resolved with only 1 active player", function(){
-        expect(Weez.bidSolo(game.players[1])).toEqual(true);
-        expect(Weez.bidSolo(game.players[2])).toEqual(false);
+        expect(ActionFactory.createSoloBidAction(game, game.players[1]).execute()).toEqual(true);
+        expect(ActionFactory.createSoloBidAction(game, game.players[2]).execute()).toEqual(false);
     });
 
     it("is always resolved with a target of 13", function(){
-        Weez.bidSolo(game.players[1]);
-        Weez.pass(game.players[2]);
-        Weez.pass(game.players[3]);
-        Weez.pass(game.players[0]);
+        ActionFactory.createSoloBidAction(game, game.players[1]).execute();
+        ActionFactory.createPassBidAction(game, game.players[2]).execute();
+        ActionFactory.createPassBidAction(game, game.players[3]).execute();
+        ActionFactory.createPassBidAction(game, game.players[0]).execute();
 
         expect(game.mode).toEqual(Mode.SOLO);
         expect(game.target).toEqual(13);
@@ -41,15 +41,15 @@ describe("A valid solo bid", function(){
         it("by bidding with a higher suit", function(){
             game.defaultTrump = Suit.DIAMONDS;
 
-            Weez.bidSolo(game.players[1], Suit.SPADES);
-            expect(Weez.bidSolo(game.players[2], Suit.CLUBS)).toEqual(true);
+            ActionFactory.createSoloBidAction(game, game.players[1], Suit.SPADES).execute()
+            expect(ActionFactory.createSoloBidAction(game, game.players[2], Suit.CLUBS).execute()).toEqual(true);
         });
 
         it("by bidding with the default trump", function(){
             game.defaultTrump = Suit.SPADES;
 
-            Weez.bidSolo(game.players[1], Suit.HEARTS);
-            expect(Weez.bidSolo(game.players[2], Suit.SPADES)).toEqual(true);
+            ActionFactory.createSoloBidAction(game, game.players[1], Suit.HEARTS).execute();
+            expect(ActionFactory.createSoloBidAction(game, game.players[2], Suit.SPADES).execute()).toEqual(true);
         });
     });
 });

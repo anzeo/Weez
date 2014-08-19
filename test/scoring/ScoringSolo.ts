@@ -10,7 +10,7 @@ describe("Players are assigned a score after a solo game", function(){
 
     var game;
     beforeEach(function(){
-        game = Weez.createGame();
+        game = Weez.getGame(Weez.createGame());
         game.players = [new Player(), new Player(), new Player(), new Player()];
         // mock phase
         game.phase = Phase.PLAY;
