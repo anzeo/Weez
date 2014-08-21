@@ -42,7 +42,7 @@ class MiseryCalculator extends DefaultCalculator {
 }
 
 // TODO temporary solution, will need to decide on what we're going to use later on
-function filterArray(array: Array, callback: (item) => boolean): Array{
+function filterArray(array: Array<Player>, callback: (item) => boolean): Array<Player>{
     var filteredResult = [];
     for(var i =0; i < array.length; i++){
         if(callback(array[i])){

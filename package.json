@@ -2,7 +2,9 @@
   "name": "weez",
   "version": "0.1.1",
   "main": "src/Weez.js",
-  "dependencies": {},
+  "dependencies": {
+    "typescript": "^1.0.1"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-clean": "~0.4.1",
@@ -10,7 +12,8 @@
     "grunt-jasmine-node": "~0.2.1"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "node node_modules/typescript/bin/tsc src/Weez.ts --module commonjs"
   },
   "engines": {
     "node": ">=0.8.0"
